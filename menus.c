@@ -231,8 +231,8 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
 
   }
 
-  printf("\nA CORRIDA TERMINOU!\n");
   calPontos(saveS, combina);
+  printf("\nA CORRIDA TERMINOU!\n");
   //menu para ver os tempos
   menufinalcor(saveS, combina, voltas, nMaxP);
   printf("test\n");
@@ -303,7 +303,7 @@ int menufinalcor(psS saveS, pCon combina, int nMaxP, int voltas)
       break;
 
     case 0:
-
+      printf("a returnar");
       return 0;
       break;
 
