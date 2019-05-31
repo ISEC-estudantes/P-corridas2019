@@ -142,7 +142,7 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
   }
 
   pCon combina = selCarPil(nMaxP, saveS);
-  if (combina==NULL)
+  if (combina == NULL)
   {
     printf("Falta de memoria no computador.\n");
     return -1;
@@ -155,7 +155,7 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
   // loop de voltas
   for (c = 0; c < voltas; c++)
   {
-    printf("volta %d\n", c+1);
+    printf("volta %d\n", c + 1);
     // loop para passar por todas as combinações
     for (finder = combina; finder != NULL; finder = finder->prox)
     {
@@ -224,11 +224,10 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
     combina = novoord(saveS, combina, c); //novo organizador
     printf("nope\n");
     if (ndes == nMaxP)
-      break;          
-                      
+      break;
+
     //printa as posições
     verPos(combina, saveS, voltas, c, 1);
-
   }
 
   calPontos(saveS, combina);
@@ -290,12 +289,15 @@ pCon adicionaCon(pCon inicio, int piloto, int carro)
 
 int menufinalcor(psS saveS, pCon combina, int nMaxP, int voltas)
 {
-  int escolha = 0, help = 0;
-  while (escolha != 2)
+  int escolha = -1, help = -1;
+  while (escolha != 0)
   {
-    printf("Deseja ver com detanhe a corrida(1), ver os pilotos e carros que correram(2) ou deseja ir para o menu principal(0)?\n=>");
-    if (scanf(" %d", escolha) != 1)
-      scanf(" %*[^\n]");
+    scanf("%*[^\n]");
+    printf("Deseja ver com detanhe a corrida(1), ver os pilotos e carros que correram(2) ou deseja ir para o menu principal(0)?\n=> ");
+    if (scanf("%d", escolha) != 1)
+      printf("this is working\n");
+    scanf(" %*[^\n]");
+    printf("o erro ocorre à frente\n");
     switch (escolha)
     {
     case 1:
@@ -303,7 +305,7 @@ int menufinalcor(psS saveS, pCon combina, int nMaxP, int voltas)
       break;
 
     case 0:
-      printf("a returnar");
+      printf("a returnar\n");
       return 0;
       break;
 
@@ -321,7 +323,6 @@ int menufinalcor(psS saveS, pCon combina, int nMaxP, int voltas)
         printf("\nPara escolher digite o numero respectivo para a sua resposta e clique enter para continuar.\n\n");
         help = 0;
       }
-      break;
     }
   }
   return 0;
@@ -329,7 +330,6 @@ int menufinalcor(psS saveS, pCon combina, int nMaxP, int voltas)
 
 void freeall(psS saveS)
 {
-
   free(saveS->pPilotos);
   free(saveS->pCarros);
   free(saveS);
@@ -337,11 +337,11 @@ void freeall(psS saveS)
 
 int vercorrida(psS saveS, pCon combina, int nMaxP, int voltas)
 {
-  int escolha = 0, sair, help = 0;
+  int escolha = 0, help = 0;
   while (escolha == 0)
   {
     printf("\n\tVisualisação de Corrida com detanhe.\nDeseja ver uma volta com detalhe(1) ou a performance de um piloto(2)?(Para sair use 0)\n");
-    if (scanf(" %d", escolha) != 1)
+    if (scanf("%d", escolha) != 1)
       scanf(" %*[^\n]");
 
     switch (escolha)
@@ -354,7 +354,6 @@ int vercorrida(psS saveS, pCon combina, int nMaxP, int voltas)
       printf("Digite o numero do piloto que quer ver o historico da corrida com detalhe, pode tambem digitar 0 para sair.\n");
       if (scanf(" %d", escolha) != 1)
         scanf(" %*[^\n]", escolha);
-
       switch (escolha)
         break;
     case 3:
@@ -374,5 +373,4 @@ int vercorrida(psS saveS, pCon combina, int nMaxP, int voltas)
     }
   }
   return 0;
-
 }
