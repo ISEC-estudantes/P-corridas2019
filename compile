@@ -1,0 +1,1 @@
+gcc main.c carros.c leitura.c menus.c pilotos.c utils.c -o run -std=c99
