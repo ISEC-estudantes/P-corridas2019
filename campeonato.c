@@ -45,7 +45,8 @@ int campeonato(psS saveS)
       scanf(" %*[^\n]");
   }
 
-  corridamenu(saveS,voltas,comp,nMaxP)
+  corridamenu(saveS,voltas,comp,nMaxP);
+  
 
 
 }

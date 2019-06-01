@@ -261,8 +261,6 @@ pCon gth(pCon combina)
 
 void verPos(pCon combina, psS saveS, int voltastotal, int voltaact, int esperar)
 {
-  // printf("\n#####Posições:####\n\n");
-  // bigger- maior tempo possivel
   if (esperar == 1)
     printf("\n\tClassificação na volta %d\n", voltaact + 1);
   if (esperar == 0)
@@ -307,7 +305,6 @@ void verPos(pCon combina, psS saveS, int voltastotal, int voltaact, int esperar)
 pCon ordTem(pCon inicio)
 {
   int i = 0, f = 0;
-  printf("entrou na ordenação\n");
   if (inicio == NULL || inicio->prox == NULL)
     return inicio;
 
@@ -319,7 +316,6 @@ pCon ordTem(pCon inicio)
   for (auxfinder = inicio->prox; auxfinder->prox != NULL;
        auxfinder = auxfinder->prox)
   {
-    printf("loop %d\n", ++i);
 
     if (auxfinder->total >
         auxfinder->prox->total)
@@ -328,7 +324,6 @@ pCon ordTem(pCon inicio)
       for (finder = auxfinder; finder->ant != NULL; finder->ant)
         if (finder->total > finder->prox->total)
         {
-          printf("loop 2 %d\n", ++f);
 
           // ver se existe algo antes do finder
           if (finder->ant != NULL)
