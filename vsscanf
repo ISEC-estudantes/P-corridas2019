@@ -1,0 +1,369 @@
+SCANF(3)                    Linux Programmer's Manual                    SCANF(3)
+
+NNAAMMEE
+       scanf, fscanf, sscanf, vscanf, vsscanf, vfscanf - input format conversion
+
+SSYYNNOOPPSSIISS
+       ##iinncclluuddee <<ssttddiioo..hh>>
+
+       iinntt ssccaannff((ccoonnsstt cchhaarr **_f_o_r_m_a_t,, ......));;
+       iinntt ffssccaannff((FFIILLEE **_s_t_r_e_a_m,, ccoonnsstt cchhaarr **_f_o_r_m_a_t,, ......));;
+       iinntt ssssccaannff((ccoonnsstt cchhaarr **_s_t_r,, ccoonnsstt cchhaarr **_f_o_r_m_a_t,, ......));;
+
+       ##iinncclluuddee <<ssttddaarrgg..hh>>
+
+       iinntt vvssccaannff((ccoonnsstt cchhaarr **_f_o_r_m_a_t,, vvaa__lliisstt _a_p));;
+       iinntt vvssssccaannff((ccoonnsstt cchhaarr **_s_t_r,, ccoonnsstt cchhaarr **_f_o_r_m_a_t,, vvaa__lliisstt _a_p));;
+       iinntt vvffssccaannff((FFIILLEE **_s_t_r_e_a_m,, ccoonnsstt cchhaarr **_f_o_r_m_a_t,, vvaa__lliisstt _a_p));;
+
+   Feature Test Macro Requirements for glibc (see ffeeaattuurree__tteesstt__mmaaccrrooss(7)):
+
+       vvssccaannff(), vvssssccaannff(), vvffssccaannff():
+           _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+
+DDEESSCCRRIIPPTTIIOONN
+       The  ssccaannff()  family  of  functions scans input according to _f_o_r_m_a_t as de‐
+       scribed below.  This format may contain _c_o_n_v_e_r_s_i_o_n _s_p_e_c_i_f_i_c_a_t_i_o_n_s; the re‐
+       sults  from  such conversions, if any, are stored in the locations pointed
+       to by the _p_o_i_n_t_e_r arguments that follow  _f_o_r_m_a_t.   Each  _p_o_i_n_t_e_r  argument
+       must be of a type that is appropriate for the value returned by the corre‐
+       sponding conversion specification.
+
+       If the number of conversion specifications in _f_o_r_m_a_t exceeds the number of
+       _p_o_i_n_t_e_r  arguments,  the  results are undefined.  If the number of _p_o_i_n_t_e_r
+       arguments exceeds the number of conversion specifications, then the excess
+       _p_o_i_n_t_e_r arguments are evaluated, but are otherwise ignored.
+
+       The ssccaannff() function reads input from the standard input stream _s_t_d_i_n, ffss‐‐
+       ccaannff() reads input from the stream pointer _s_t_r_e_a_m, and ssssccaannff() reads  its
+       input from the character string pointed to by _s_t_r.
+
+       The  vvffssccaannff()  function  is analogous to vvffpprriinnttff(3) and reads input from
+       the stream pointer _s_t_r_e_a_m using a variable argument list of pointers  (see
+       ssttddaarrgg(3).   The vvssccaannff() function scans a variable argument list from the
+       standard input and the vvssssccaannff() function scans it from  a  string;  these
+       are analogous to the vvpprriinnttff(3) and vvsspprriinnttff(3) functions respectively.
+
+       The  _f_o_r_m_a_t string consists of a sequence of _d_i_r_e_c_t_i_v_e_s which describe how
+       to process the sequence of input characters.  If processing of a directive
+       fails,  no further input is read, and ssccaannff() returns.  A "failure" can be
+       either of the following: _i_n_p_u_t _f_a_i_l_u_r_e, meaning that input characters were
+       unavailable, or _m_a_t_c_h_i_n_g _f_a_i_l_u_r_e, meaning that the input was inappropriate
+       (see below).
+
+       A directive is one of the following:
+
+       •      A sequence of white-space characters (space,  tab,  newline,  etc.;
+              see iissssppaaccee(3)).  This directive matches any amount of white space,
+              including none, in the input.
+
+       •      An ordinary character (i.e., one other than white  space  or  '%').
+              This character must exactly match the next character of input.
+
+       •      A  conversion  specification,  which commences with a '%' (percent)
+              character.  A sequence of characters from the  input  is  converted
+              according  to  this  specification, and the result is placed in the
+              corresponding _p_o_i_n_t_e_r argument.  If the next item of input does not
+              match  the conversion specification, the conversion fails—this is a
+              _m_a_t_c_h_i_n_g _f_a_i_l_u_r_e.
+
+       Each _c_o_n_v_e_r_s_i_o_n _s_p_e_c_i_f_i_c_a_t_i_o_n in _f_o_r_m_a_t begins with either  the  character
+       '%'  or  the character sequence "%%_n$$" (see below for the distinction) fol‐
+       lowed by:
+
+       •      An optional '*' assignment-suppression character: ssccaannff() reads in‐
+              put  as  directed by the conversion specification, but discards the
+              input.  No corresponding _p_o_i_n_t_e_r argument  is  required,  and  this
+              specification  is  not  included in the count of successful assign‐
+              ments returned by ssccaannff().
+
+       •      For decimal conversions, an optional  quote  character  (').   This
+              specifies  that  the input number may include thousands' separators
+              as defined by the LLCC__NNUUMMEERRIICC category of the current locale.   (See
+              sseettllooccaallee(3).)   The  quote character may precede or follow the '*'
+              assignment-suppression character.
+
+       •      An optional 'm' character.  This is used  with  string  conversions
+              (_%_s,  _%_c,  _%_[),  and  relieves the caller of the need to allocate a
+              corresponding buffer to hold the input: instead, ssccaannff()  allocates
+              a buffer of sufficient size, and assigns the address of this buffer
+              to the corresponding _p_o_i_n_t_e_r argument, which should be a pointer to
+              a  _c_h_a_r _*  variable  (this variable does not need to be initialized
+              before the call).  The caller should subsequently ffrreeee(3) this buf‐
+              fer when it is no longer required.
+
+       •      An  optional  decimal  integer  which  specifies  the _m_a_x_i_m_u_m _f_i_e_l_d
+              _w_i_d_t_h.  Reading of characters stops either  when  this  maximum  is
+              reached or when a nonmatching character is found, whichever happens
+              first.  Most conversions discard  initial  white  space  characters
+              (the  exceptions  are  noted below), and these discarded characters
+              don't count toward the maximum field width.  String  input  conver‐
+              sions  store  a terminating null byte ('\0') to mark the end of the
+              input; the maximum field width does not include this terminator.
+
+       •      An optional _t_y_p_e _m_o_d_i_f_i_e_r _c_h_a_r_a_c_t_e_r.  For example, the ll type modi‐
+              fier  is  used  with integer conversions such as %%dd to specify that
+              the corresponding _p_o_i_n_t_e_r argument refers to a _l_o_n_g _i_n_t rather than
+              a pointer to an _i_n_t.
+
+       •      A  _c_o_n_v_e_r_s_i_o_n _s_p_e_c_i_f_i_e_r that specifies the type of input conversion
+              to be performed.
+
+       The conversion specifications in _f_o_r_m_a_t are of two forms, either beginning
+       with  '%'  or  beginning with "%%_n$$".  The two forms should not be mixed in
+       the same _f_o_r_m_a_t string, except that a string containing  "%%_n$$"  specifica‐
+       tions  can include %%%% and %%**.  If _f_o_r_m_a_t contains '%' specifications, then
+       these correspond in order with successive _p_o_i_n_t_e_r arguments.  In the "%%_n$$"
+       form (which is specified in POSIX.1-2001, but not C99), _n is a decimal in‐
+       teger that specifies that the converted input should be placed in the  lo‐
+       cation referred to by the _n-th _p_o_i_n_t_e_r argument following _f_o_r_m_a_t.
+
+   CCoonnvveerrssiioonnss
+       The following _t_y_p_e _m_o_d_i_f_i_e_r _c_h_a_r_a_c_t_e_r_s can appear in a conversion specifi‐
+       cation:
+
+       hh      Indicates that the conversion will be one of dd, ii, oo, uu, xx, XX, or nn
+              and  the next pointer is a pointer to a _s_h_o_r_t _i_n_t or _u_n_s_i_g_n_e_d _s_h_o_r_t
+              _i_n_t (rather than _i_n_t).
+
+       hhhh     As for hh, but the next pointer is a pointer to a _s_i_g_n_e_d _c_h_a_r or _u_n_‐
+              _s_i_g_n_e_d _c_h_a_r.
+
+       jj      As  for  hh,  but  the next pointer is a pointer to an _i_n_t_m_a_x___t or a
+              _u_i_n_t_m_a_x___t.  This modifier was introduced in C99.
+
+       ll      Indicates either that the conversion will be one of dd, ii, oo, uu,  xx,
+              XX, or nn and the next pointer is a pointer to a _l_o_n_g _i_n_t or _u_n_s_i_g_n_e_d
+              _l_o_n_g _i_n_t (rather than _i_n_t), or that the conversion will be  one  of
+              ee, ff, or gg and the next pointer is a pointer to _d_o_u_b_l_e (rather than
+              _f_l_o_a_t).  Specifying two ll characters is equivalent to LL.   If  used
+              with  %%cc  or  %%ss,  the  corresponding  parameter is considered as a
+              pointer to a wide character or wide-character string respectively.
+
+       LL      Indicates that the conversion will be either ee, ff,  or  gg  and  the
+              next  pointer is a pointer to _l_o_n_g _d_o_u_b_l_e or the conversion will be
+              dd, ii, oo, uu, or xx and the next pointer is a pointer to _l_o_n_g _l_o_n_g.
+
+       qq      equivalent to LL.  This specifier does not exist in ANSI C.
+
+       tt      As for hh, but the next pointer is a pointer to a  _p_t_r_d_i_f_f___t.   This
+              modifier was introduced in C99.
+
+       zz      As for hh, but the next pointer is a pointer to a _s_i_z_e___t.  This mod‐
+              ifier was introduced in C99.
+
+       The following _c_o_n_v_e_r_s_i_o_n _s_p_e_c_i_f_i_e_r_s are available:
+
+       %%      Matches a literal '%'.  That is, %%%% in the format string matches  a
+              single  input  '%'  character.   No conversion is done (but initial
+              white space characters are discarded), and assignment does not  oc‐
+              cur.
+
+       dd      Matches an optionally signed decimal integer; the next pointer must
+              be a pointer to _i_n_t.
+
+       DD      Equivalent to _l_d; this  exists  only  for  backward  compatibility.
+              (Note:  thus  only in libc4.  In libc5 and glibc the %%DD is silently
+              ignored, causing old programs to fail mysteriously.)
+
+       ii      Matches an optionally signed integer; the next pointer  must  be  a
+              pointer  to  _i_n_t.  The integer is read in base 16 if it begins with
+              _0_x or _0_X, in base 8 if it begins with _0, and in base 10  otherwise.
+              Only characters that correspond to the base are used.
+
+       oo      Matches  an  unsigned  octal  integer;  the  next pointer must be a
+              pointer to _u_n_s_i_g_n_e_d _i_n_t.
+
+       uu      Matches an unsigned decimal integer; the next  pointer  must  be  a
+              pointer to _u_n_s_i_g_n_e_d _i_n_t.
+
+       xx      Matches an unsigned hexadecimal integer; the next pointer must be a
+              pointer to _u_n_s_i_g_n_e_d _i_n_t.
+
+       XX      Equivalent to xx.
+
+       ff      Matches  an  optionally  signed  floating-point  number;  the  next
+              pointer must be a pointer to _f_l_o_a_t.
+
+       ee      Equivalent to ff.
+
+       gg      Equivalent to ff.
+
+       EE      Equivalent to ff.
+
+       aa      (C99) Equivalent to ff.
+
+       ss      Matches  a sequence of non-white-space characters; the next pointer
+              must be a pointer to the initial element of a character array  that
+              is  long enough to hold the input sequence and the terminating null
+              byte ('\0'), which is added automatically.  The input string  stops
+              at  white  space  or  at  the maximum field width, whichever occurs
+              first.
+
+       cc      Matches a sequence of characters whose length is specified  by  the
+              _m_a_x_i_m_u_m _f_i_e_l_d _w_i_d_t_h (default 1); the next pointer must be a pointer
+              to _c_h_a_r, and there must be enough room for all the  characters  (no
+              terminating  null  byte is added).  The usual skip of leading white
+              space is suppressed.  To skip white space first,  use  an  explicit
+              space in the format.
+
+       [[      Matches a nonempty sequence of characters from the specified set of
+              accepted characters; the next pointer must be a  pointer  to  _c_h_a_r,
+              and there must be enough room for all the characters in the string,
+              plus a terminating null byte.  The  usual  skip  of  leading  white
+              space  is suppressed.  The string is to be made up of characters in
+              (or not in) a particular set; the set is defined by the  characters
+              between  the open bracket [[ character and a close bracket ]] charac‐
+              ter.  The set _e_x_c_l_u_d_e_s those characters if the first character  af‐
+              ter  the  open  bracket  is  a  circumflex (^^).  To include a close
+              bracket in the set, make it the  first  character  after  the  open
+              bracket  or  the  circumflex;  any other position will end the set.
+              The hyphen character -- is also special;  when  placed  between  two
+              other  characters,  it  adds all intervening characters to the set.
+              To include a hyphen, make it the last character  before  the  final
+              close  bracket.   For  instance, [[^^]]00--99--]] means the set "everything
+              except close bracket, zero through nine, and hyphen".   The  string
+              ends with the appearance of a character not in the (or, with a cir‐
+              cumflex, in) set or when the field width runs out.
+
+       pp      Matches a pointer value (as printed by %%pp in  pprriinnttff(3);  the  next
+              pointer must be a pointer to a pointer to _v_o_i_d.
+
+       nn      Nothing  is  expected;  instead,  the number of characters consumed
+              thus far from the input is stored through the next  pointer,  which
+              must  be  a  pointer to _i_n_t.  This is _n_o_t a conversion and does _n_o_t
+              increase the count returned by the function.  The assignment can be
+              suppressed with the ** assignment-suppression character, but the ef‐
+              fect on the return value is undefined.  Therefore  %%**nn  conversions
+              should not be used.
+
+RREETTUURRNN VVAALLUUEE
+       On  success, these functions return the number of input items successfully
+       matched and assigned; this can be fewer than provided for, or  even  zero,
+       in the event of an early matching failure.
+
+       The value EEOOFF is returned if the end of input is reached before either the
+       first successful conversion or a matching failure occurs.  EEOOFF is also re‐
+       turned  if  a read error occurs, in which case the error indicator for the
+       stream (see ffeerrrroorr(3)) is set, and _e_r_r_n_o is set to indicate the error.
+
+EERRRROORRSS
+       EEAAGGAAIINN The file descriptor underlying _s_t_r_e_a_m is  marked  nonblocking,  and
+              the read operation would block.
+
+       EEBBAADDFF  The  file  descriptor underlying _s_t_r_e_a_m is invalid, or not open for
+              reading.
+
+       EEIILLSSEEQQ Input byte sequence does not form a valid character.
+
+       EEIINNTTRR  The read operation was interrupted by a signal; see ssiiggnnaall(7).
+
+       EEIINNVVAALL Not enough arguments; or _f_o_r_m_a_t is NULL.
+
+       EENNOOMMEEMM Out of memory.
+
+       EERRAANNGGEE The result of an integer conversion would exceed the size that  can
+              be stored in the corresponding integer type.
+
+AATTTTRRIIBBUUTTEESS
+       For an explanation of the terms used in this section, see aattttrriibbuutteess(7).
+
+       ┌─────────────────────┬───────────────┬────────────────┐
+       │IInntteerrffaaccee            │ AAttttrriibbuuttee     │ VVaalluuee          │
+       ├─────────────────────┼───────────────┼────────────────┤
+       │ssccaannff(), ffssccaannff(),   │ Thread safety │ MT-Safe locale │
+       │ssssccaannff(), vvssccaannff(),  │               │                │
+       │vvssssccaannff(), vvffssccaannff() │               │                │
+       └─────────────────────┴───────────────┴────────────────┘
+
+CCOONNFFOORRMMIINNGG TTOO
+       The  functions  ffssccaannff(), ssccaannff(), and ssssccaannff() conform to C89 and C99 and
+       POSIX.1-2001.  These standards do not specify the EERRAANNGGEE error.
+
+       The qq specifier is the 4.4BSD notation for _l_o_n_g _l_o_n_g, while llll or the  us‐
+       age of LL in integer conversions is the GNU notation.
+
+       The  Linux  version  of these functions is based on the _G_N_U _l_i_b_i_o library.
+       Take a look at the _i_n_f_o documentation of _G_N_U _l_i_b_c _(_g_l_i_b_c_-_1_._0_8_) for a  more
+       concise description.
+
+NNOOTTEESS
+   TThhee ''aa'' aassssiiggnnmmeenntt--aallllooccaattiioonn mmooddiiffiieerr
+       Originally,  the GNU C library supported dynamic allocation for string in‐
+       puts (as a nonstandard extension) via the aa character.  (This  feature  is
+       present  at  least  as  far back as glibc 2.0.)  Thus, one could write the
+       following to have ssccaannff() allocate a buffer for an input  string,  with  a
+       pointer to that buffer being returned in _*_b_u_f:
+
+           char *buf;
+           scanf("%as", &buf);
+
+       The  use of the letter aa for this purpose was problematic, since aa is also
+       specified by the ISO C standard as a synonym for ff (floating-point input).
+       POSIX.1-2008  instead  specifies  the mm modifier for assignment allocation
+       (as documented in DESCRIPTION, above).
+
+       Note that the aa modifier is not available if the program is compiled  with
+       _g_c_c  _-_s_t_d_=_c_9_9  or  _g_c_c _-_D___I_S_O_C_9_9___S_O_U_R_C_E (unless __GGNNUU__SSOOUURRCCEE is also speci‐
+       fied), in which case the aa is interpreted as  a  specifier  for  floating-
+       point numbers (see above).
+
+       Support  for  the mm modifier was added to glibc starting with version 2.7,
+       and new programs should use that modifier instead of aa.
+
+       As well as being standardized by POSIX, the mm modifier has  the  following
+       further advantages over the use of aa::
+
+       * It may also be applied to %%cc conversion specifiers (e.g., %%33mmcc).
+
+       * It  avoids  ambiguity  with  respect to the %%aa floating-point conversion
+         specifier (and is unaffected by _g_c_c _-_s_t_d_=_c_9_9 etc.).
+
+BBUUGGSS
+       All functions are fully C89 conformant, but provide the additional  speci‐
+       fiers qq and aa as well as an additional behavior of the LL and ll specifiers.
+       The latter may be considered to be a bug, as it changes  the  behavior  of
+       specifiers defined in C89.
+
+       Some  combinations of the type modifiers and conversion specifiers defined
+       by ANSI C do not make sense (e.g., %%LLdd).  While they may have  a  well-de‐
+       fined  behavior  on  Linux, this need not to be so on other architectures.
+       Therefore it usually is better to use modifiers that are  not  defined  by
+       ANSI C at all, that is, use qq instead of LL in combination with dd, ii, oo, uu,
+       xx, and XX conversions or llll.
+
+       The usage of qq is not the same as on 4.4BSD, as it may be  used  in  float
+       conversions equivalently to LL.
+
+EEXXAAMMPPLLEE
+       To  use the dynamic allocation conversion specifier, specify mm as a length
+       modifier (thus %%mmss or %%mm[[_r_a_n_g_e]]).  The caller must  ffrreeee(3)  the  returned
+       string, as in the following example:
+
+           char *p;
+           int n;
+
+           errno = 0;
+           n = scanf("%m[a-z]", &p);
+           if (n == 1) {
+               printf("read: %s\n", p);
+               free(p);
+           } else if (errno != 0) {
+               perror("scanf");
+           } else {
+               fprintf(stderr, "No matching characters\n");
+           }
+
+       As shown in the above example, it is necessary to call ffrreeee(3) only if the
+       ssccaannff() call successfully read a string.
+
+SSEEEE AALLSSOO
+       ggeettcc(3), pprriinnttff(3), sseettllooccaallee(3), ssttrrttoodd(3), ssttrrttooll(3), ssttrrttoouull(3)
+
+CCOOLLOOPPHHOONN
+       This page is part of release 5.01 of the Linux _m_a_n_-_p_a_g_e_s project.   A  de‐
+       scription of the project, information about reporting bugs, and the latest
+       version      of      this      page,      can      be       found       at
+       https://www.kernel.org/doc/man-pages/.
+
+GNU                                 2019-03-06                           SCANF(3)
