@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pilotos.h"
-#include "leitura.h"
+#include "corrida.h"
 
 
 int readPilotos(char *file, pPi *pPilotos, int *nPilotos) {

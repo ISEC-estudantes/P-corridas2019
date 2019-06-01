@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "pilotos.h"
 #include "carros.h"
-#include "leitura.h"
+#include "corrida.h"
 #include "utils.h"
 #include "menus.h"
 

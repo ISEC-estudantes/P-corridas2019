@@ -3,7 +3,7 @@
 /* Nº 21280302                */
 /******************************/
 #include "carros.h"
-#include "leitura.h"
+#include "corrida.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

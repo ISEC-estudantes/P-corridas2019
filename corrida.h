@@ -2,8 +2,8 @@
 /* João Pedro Neves Gonçalves */
 /* Nº 21280302                */
 /******************************/
-#ifndef LEIRUTORA_H
-#define LEIRUTORA_H
+#ifndef CORRIDA_H
+#define CORRIDA_H
 
 typedef struct piloto Pi, *pPi;
 typedef struct carro Car, *pCar;

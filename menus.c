@@ -4,7 +4,7 @@
 /******************************/
 #include "menus.h"
 #include "carros.h"
-#include "leitura.h"
+#include "corrida.h"
 #include "pilotos.h"
 #include "utils.h"
 #include <stdio.h>
@@ -93,7 +93,7 @@ int mainmenu(psS saveS)
   return 0;
 }
 
- int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
+int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
 {
 
   /****OBETER VALORES********/
@@ -127,7 +127,6 @@ int mainmenu(psS saveS)
     }
   }
 
-
   pCon combina = selCarPil(nMaxP, saveS);
   if (combina == NULL)
   {
@@ -135,12 +134,11 @@ int mainmenu(psS saveS)
     return -1;
   }
 
-  combina = fazercorrida()
+  combina = fazercorrida(saveS, combina, voltas, comp, nMaxP);
 
   printf("\nA CORRIDA TERMINOU!\n");
   //menu para ver os tempos
   menufinalcor(saveS, combina, voltas, nMaxP);
-  printf("test\n");
   //limpar memoria dinamica
   freecorr(combina);
 
@@ -198,12 +196,10 @@ int menufinalcor(psS saveS, pCon combina, int nMaxP, int voltas)
   int escolha = -1, help = -1;
   while (escolha != 0)
   {
-   
-    printf("Deseja ver com detanhe a corrida(1), ver os pilotos e carros que correram(2) ou deseja ir para o menu principal(0)?\n=> ");
-    if (scanf("%d", escolha) != 1)
-      printf("this is working\n");
-    scanf(" %*[^\n]");
-    printf("o erro ocorre à frente\n");
+
+    printf("\nDeseja ver com detanhe a corrida(1), ver os pilotos e carros que correram(2) ou deseja ir para o menu principal(0)?\n=> ");
+    if (scanf("%d", &escolha) != 1)
+      scanf(" %*[^\n]");
     switch (escolha)
     {
     case 1:
@@ -243,11 +239,12 @@ void freeall(psS saveS)
 
 int vercorrida(psS saveS, pCon combina, int nMaxP, int voltas)
 {
-  int escolha = 0, help = 0;
-  while (escolha == 0)
+  int escolha = -1, help = 0;
+  while (escolha != 0)
   {
-    printf("\n\tVisualisação de Corrida com detanhe.\nDeseja ver uma volta com detalhe(1) ou a performance de um piloto(2)?(Para sair use 0)\n");
-    if (scanf("%d", escolha) != 1)
+    printf("\n\tVisualisação de Corrida com detanhe.\nDeseja ver uma volta com detalhe(1) ou a performance de um piloto(2)?(Para sair use 0)\n"
+    "=> ");
+    if (scanf("%d", &escolha) != 1)
       scanf(" %*[^\n]");
 
     switch (escolha)
@@ -258,8 +255,8 @@ int vercorrida(psS saveS, pCon combina, int nMaxP, int voltas)
     case 2:
 
       printf("Digite o numero do piloto que quer ver o historico da corrida com detalhe, pode tambem digitar 0 para sair.\n");
-      if (scanf(" %d", escolha) != 1)
-        scanf(" %*[^\n]", escolha);
+      if (scanf(" %d", &escolha) != 1)
+        scanf(" %*[^\n]");
       switch (escolha)
         break;
     case 3:
