@@ -2,7 +2,7 @@
 /* João Pedro Neves Gonçalves */
 /* Nº 21280302                */
 /******************************/
-#include "leitura.h"
+#include "corrida.h"
 #include "carros.h"
 #include "menus.h"
 #include "pilotos.h"
@@ -398,7 +398,7 @@ pCon novoord(psS saveS, pCon combina, int volta)
   return combina;
 }
 
-pCon totalde(pCon combina,int volta)
+pCon totalde(pCon combina, int volta)
 {
   pCon aux;
   int i;
@@ -451,4 +451,95 @@ int trocaPon(pCon *combina, pCon *aux, pCon *antaux)
   paux->prox = (*aux);
 
   return 1;
+}
+
+pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP)
+{
+
+  pCon finder, finder2;
+  int idade, ordenado = 0, *aux, i, ndes = 0;
+  Car scarro;
+  Pi spiloto;
+  int prob, c;
+  // loop de voltas
+  for (c = 0; c < voltas; c++)
+  {
+    printf("volta %d\n", c + 1);
+    // loop para passar por todas as combinações
+    for (finder = combina; finder != NULL; finder = finder->prox)
+    {
+      // estruturas dos carros e pilotos desta combinação
+      spiloto = saveS->pPilotos[finder->piloto];
+      scarro = saveS->pCarros[finder->carro];
+
+      // criar vetor dos resultdos das voltas
+      if (c == 0)
+      {
+        finder->idade = calIda(saveS, finder->piloto);
+        aux = malloc(sizeof(int) * voltas);
+        if (!aux)
+        {
+          printf("Erro na alocação de memoria.\n");
+          return NULL;
+        }
+        finder->tempo = aux;
+        // limpar o array de tempos para 0
+        for (i = 0; i < voltas; i++)
+          finder->tempo[i] = 0;
+      }
+      // verificar a probablidade de haver acidente caso n tennha desistido
+      if (finder->des == 0)
+      {
+        // printf("finder->des==%d de %s\n", finder->des,
+        // saveS->pPilotos[finder->piloto].nome);
+        prob = probEvento(ACIDENTE);
+        if (prob == 1)
+        {
+          // printf("probablidade ficou a 1 para a combinação do piloto
+          // %s\n",
+          //        saveS->pPilotos[finder->piloto].nome);
+          finder->des = 1;
+          spiloto.imp = 2;
+          scarro.avar = 1;
+          finder->gainexp = -1;
+          if (spiloto.exp < 1)
+            spiloto.exp = 0;
+          else
+          {
+            spiloto.exp -= 1;
+          }
+
+          finder->voltades = c;
+          ndes++;
+        }
+      }
+      if (ndes == nMaxP)
+      {
+        printf("Todos os pilotos tiveram acidentes!\n");
+        break;
+      }
+      if (finder->des == 0)
+      {
+        finder->tempo[c] = calculaSegundos(finder->idade, spiloto.peso,
+                                           spiloto.exp, scarro.pot, comp);
+        finder->total += finder->tempo[c];
+      }
+      if (finder->des == 1)
+        finder->tempo[c] = -1;
+    }
+    printf("ordenar as merdas\n");
+    //organiza a lista ligada
+    //combina = ordTem(combina); antigo organizador
+    combina = novoord(saveS, combina, c); //novo organizador
+    printf("nope\n");
+    if (ndes == nMaxP)
+      break;
+
+    //printa as posições
+    verPos(combina, saveS, voltas, c, 1);
+  }
+
+  calPontos(saveS, combina);
+
+  return combina;
 }

@@ -50,7 +50,7 @@ int main(int argc, char **argv)
   if (saveS == NULL)
     return 1;
 
-   corridamenu( saveS, 5, 500, 10);
+   corridamenu( saveS, 5, 500, 2);
   //mainmenu(saveS);
 
   return 0;

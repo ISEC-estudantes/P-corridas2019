@@ -66,5 +66,7 @@ int algord(pCon combina, psS saveS);
 //troca 2 pilotos de lugar
 int trocaPon(pCon *combina, pCon *aux, pCon *antaux);
 
+//algoritmo da corrida
+pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp,int nMaxP);
 
 #endif
