@@ -243,7 +243,7 @@ int vercorrida(psS saveS, pCon combina, int nMaxP, int voltas)
   while (escolha != 0)
   {
     printf("\n\tVisualisação de Corrida com detanhe.\nDeseja ver uma volta com detalhe(1) ou a performance de um piloto(2)?(Para sair use 0)\n"
-    "=> ");
+           "=> ");
     if (scanf("%d", &escolha) != 1)
       scanf(" %*[^\n]");
 
@@ -253,12 +253,34 @@ int vercorrida(psS saveS, pCon combina, int nMaxP, int voltas)
       verPos(combina, saveS, voltas, voltas, 0);
       break;
     case 2:
-
-      printf("Digite o numero do piloto que quer ver o historico da corrida com detalhe, pode tambem digitar 0 para sair.\n");
-      if (scanf(" %d", &escolha) != 1)
+      pCon aux;
+      int numero,i, total;
+      char output[200];
+      printf("\nDigite o numero(Id) do piloto que quer ver o historico da corrida com detalhe, pode tambem digitar 0 para sair.\n=>");
+      if (scanf(" %d", &numero) != 1)
         scanf(" %*[^\n]");
-      switch (escolha)
-        break;
+      for (aux = combina; aux != NULL; aux = aux->prox)
+      {
+        if (saveS->pPilotos[aux->piloto].Id == numero)
+        {
+          sprintf(output, "\n%s (Id:%d)/Carro %d:", saveS->pPilotos[aux->piloto].nome, saveS->pPilotos[aux->piloto].Id, saveS->pCarros[aux->carro].Id);
+          total = 0;
+          for (i = 0; i <= voltas; i++)
+          {
+
+            if (i != 0)
+              sprintf(output, "%s + ", output);
+
+            sprintf(output, "%s%d", output, aux->tempo[i]);
+            total += aux->tempo[i];
+          }
+
+          sprintf(output, "%s = %d segundos", output, total);
+
+          printf("%s\n", output);
+        }
+      }
+      break;
     case 3:
       break;
 
