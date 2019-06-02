@@ -162,6 +162,7 @@ pCon selCarPil(int nMaxP, psS saveS)
              saveS->pPilotos[c].nome, saveS->pPilotos[c].Id);
     }
   }
+  printf("não parecem ser os inicioais mas não sei de onde vem...\n");
   // verifar se existem pilotos para correr
   if (npp == 0)
   {
