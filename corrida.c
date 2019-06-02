@@ -387,7 +387,9 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
   pCon finder, finder2;
   int idade, ordenado = 0, *aux, i, ndes = 0;
   if (part != NULL)
+  {
     pCam camp = NULL;
+  }
 
   int prob, c, erro;
   // loop de voltas
@@ -493,201 +495,201 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
   {
     int pontos = 5;
     for (finder2 = combina; finder2 != NULL; finder2 = finder2->prox)
-
-      calPontos(saveS, combina);
-    rempen(saveS);
-
-    return combina;
+      ;
   }
+  calPontos(saveS, combina);
+  rempen(saveS);
 
-  pCon ordterm2(pCon combina)
-  {
+  return combina;
+}
 
-    pCon paux, inicio = combina;
-    int num, *pnum;
-    float flotua;
-    pCon finder;
-    //caso o inicio seja null ele retorna null
-    if (inicio == NULL)
-      return NULL;
+pCon ordterm2(pCon combina)
+{
 
-    //caso o seja anterior seja null e o seguinte tambem para
-    if (inicio->ant == NULL && inicio->prox == NULL)
-      return inicio;
+  pCon paux, inicio = combina;
+  int num, *pnum;
+  float flotua;
+  pCon finder;
+  //caso o inicio seja null ele retorna null
+  if (inicio == NULL)
+    return NULL;
 
-    //caso sejam so 2
-    if (inicio->prox->prox == NULL)
-      if (inicio->total > inicio->prox->total)
-      {
-
-        swap(inicio);
-        return inicio;
-      }
-
-    // para ordenar aquele que esta em primeiro, mete se o que estiver em
-    // primeiro na lista ligada
-    // verficar se o segunte mais pequeno do que o actual
-
-    //andar para a direita
-    for (finder = inicio; finder->prox != NULL;
-         finder = finder->prox)
-      //ve se o actual não esta a null só porque sim
-      // ve se o proximo esta a null para não morrer
-      //compara os tempos
-      if (finder->total > finder->prox->total)
-        //entra num ciclo qu vai levar o finder(actual) para o inicio
-        do
-        {
-          if (finder->total > finder->prox->total && finder->prox != NULL)
-          {
-            swap(finder);
-          }
-          //para que não ande para NULL
-          if (finder->ant != NULL)
-            finder = finder->ant;
-        } while (finder->ant != NULL);
-
+  //caso o seja anterior seja null e o seguinte tambem para
+  if (inicio->ant == NULL && inicio->prox == NULL)
     return inicio;
-  }
 
-  void rempen(psS saveS)
-  {
-    int i;
-    for (i = 0; i < saveS->nPilotos; i++)
-      if (saveS->pPilotos[i].imp != 0)
-      {
-        saveS->pPilotos[i].imp += -1;
-      }
-
-    for (i = 0; i < saveS->nCarros; i++)
-      if (saveS->pCarros[i].avar != 0)
-      {
-        saveS->pCarros[i].avar = 0;
-      }
-  }
-
-  pCon bubbleSort(pCon start)
-  {
-    int swapped, i;
-    pCon finder;
-    pCon lptr = NULL;
-
-    int num, *pnum;
-    float flotua;
-
-    /* Checking for empty list */
-    if (start == NULL)
-      return NULL;
-
-    do
+  //caso sejam so 2
+  if (inicio->prox->prox == NULL)
+    if (inicio->total > inicio->prox->total)
     {
-      swapped = 0;
-      finder = start;
+      swap(inicio);
+      return inicio;
+    }
 
-      while (finder->prox != lptr)
+  // para ordenar aquele que esta em primeiro, mete se o que estiver em
+  // primeiro na lista ligada
+  // verficar se o segunte mais pequeno do que o actual
+
+  //andar para a direita
+  for (finder = inicio; finder->prox != NULL;
+       finder = finder->prox)
+    //ve se o actual não esta a null só porque sim
+    // ve se o proximo esta a null para não morrer
+    //compara os tempos
+    if (finder->total > finder->prox->total)
+      //entra num ciclo qu vai levar o finder(actual) para o inicio
+      do
       {
-        if (finder->total > finder->prox->total)
+        if (finder->total > finder->prox->total && finder->prox != NULL)
         {
-          num = finder->total;
-          finder->total = finder->prox->total;
-          finder->prox->total = num;
-
-          num = finder->piloto;
-          finder->piloto = finder->prox->piloto;
-          finder->prox->piloto = num;
-
-          num = finder->idade;
-          finder->idade = finder->prox->idade;
-          finder->prox->idade = num;
-
-          num = finder->carro;
-          finder->carro = finder->prox->carro;
-          finder->prox->carro = num;
-
-          pnum = finder->tempo;
-          finder->tempo = finder->prox->tempo;
-          finder->prox->tempo = pnum;
-
-          num = finder->des;
-          finder->des = finder->prox->des;
-          finder->prox->des = num;
-
-          num = finder->voltades;
-          finder->voltades = finder->prox->voltades;
-          finder->prox->voltades = num;
-
-          flotua = finder->gainexp;
-          finder->gainexp = finder->prox->gainexp;
-          finder->prox->gainexp = flotua;
-
-          num = finder->pos;
-          finder->pos = finder->prox->pos;
-          finder->prox->pos = num;
-
-          swapped = 1;
+          swap(finder);
         }
-        finder = finder->prox;
-      }
-      lptr = finder;
-    } while (swapped);
-    return start;
-  }
+        //para que não ande para NULL
+        if (finder->ant != NULL)
+          finder = finder->ant;
+      } while (finder->ant != NULL);
 
-  void swap(pCon finder)
-  {
+  return inicio;
+}
 
-    int num, *pnum;
-    float flotua;
-
-    num = finder->total;
-    finder->total = finder->prox->total;
-    finder->prox->total = num;
-
-    num = finder->piloto;
-    finder->piloto = finder->prox->piloto;
-    finder->prox->piloto = num;
-
-    num = finder->idade;
-    finder->idade = finder->prox->idade;
-    finder->prox->idade = num;
-
-    num = finder->carro;
-    finder->carro = finder->prox->carro;
-    finder->prox->carro = num;
-
-    pnum = finder->tempo;
-    finder->tempo = finder->prox->tempo;
-    finder->prox->tempo = pnum;
-
-    num = finder->des;
-    finder->des = finder->prox->des;
-    finder->prox->des = num;
-
-    num = finder->voltades;
-    finder->voltades = finder->prox->voltades;
-    finder->prox->voltades = num;
-
-    flotua = finder->gainexp;
-    finder->gainexp = finder->prox->gainexp;
-    finder->prox->gainexp = flotua;
-
-    num = finder->pos;
-    finder->pos = finder->prox->pos;
-    finder->prox->pos = num;
-  }
-
-  void fixant(pCon start)
-  {
-    pCon antaux;
-    start->ant = NULL;
-    antaux = NULL;
-    for (pCon aux = start; aux != NULL; aux = aux->prox)
+void rempen(psS saveS)
+{
+  int i;
+  for (i = 0; i < saveS->nPilotos; i++)
+    if (saveS->pPilotos[i].imp != 0)
     {
-      if (aux != NULL)
+      saveS->pPilotos[i].imp += -1;
+    }
+
+  for (i = 0; i < saveS->nCarros; i++)
+    if (saveS->pCarros[i].avar != 0)
+    {
+      saveS->pCarros[i].avar = 0;
+    }
+}
+
+pCon bubbleSort(pCon start)
+{
+  int swapped, i;
+  pCon finder;
+  pCon lptr = NULL;
+
+  int num, *pnum;
+  float flotua;
+
+  /* Checking for empty list */
+  if (start == NULL)
+    return NULL;
+
+  do
+  {
+    swapped = 0;
+    finder = start;
+
+    while (finder->prox != lptr)
+    {
+      if (finder->total > finder->prox->total)
       {
-        if (antaux != NULL)
-          aux->ant = antaux;
-        antaux = aux;
+        num = finder->total;
+        finder->total = finder->prox->total;
+        finder->prox->total = num;
+
+        num = finder->piloto;
+        finder->piloto = finder->prox->piloto;
+        finder->prox->piloto = num;
+
+        num = finder->idade;
+        finder->idade = finder->prox->idade;
+        finder->prox->idade = num;
+
+        num = finder->carro;
+        finder->carro = finder->prox->carro;
+        finder->prox->carro = num;
+
+        pnum = finder->tempo;
+        finder->tempo = finder->prox->tempo;
+        finder->prox->tempo = pnum;
+
+        num = finder->des;
+        finder->des = finder->prox->des;
+        finder->prox->des = num;
+
+        num = finder->voltades;
+        finder->voltades = finder->prox->voltades;
+        finder->prox->voltades = num;
+
+        flotua = finder->gainexp;
+        finder->gainexp = finder->prox->gainexp;
+        finder->prox->gainexp = flotua;
+
+        num = finder->pos;
+        finder->pos = finder->prox->pos;
+        finder->prox->pos = num;
+
+        swapped = 1;
       }
+      finder = finder->prox;
+    }
+    lptr = finder;
+  } while (swapped);
+  return start;
+}
+
+void swap(pCon finder)
+{
+
+  int num, *pnum;
+  float flotua;
+
+  num = finder->total;
+  finder->total = finder->prox->total;
+  finder->prox->total = num;
+
+  num = finder->piloto;
+  finder->piloto = finder->prox->piloto;
+  finder->prox->piloto = num;
+
+  num = finder->idade;
+  finder->idade = finder->prox->idade;
+  finder->prox->idade = num;
+
+  num = finder->carro;
+  finder->carro = finder->prox->carro;
+  finder->prox->carro = num;
+
+  pnum = finder->tempo;
+  finder->tempo = finder->prox->tempo;
+  finder->prox->tempo = pnum;
+
+  num = finder->des;
+  finder->des = finder->prox->des;
+  finder->prox->des = num;
+
+  num = finder->voltades;
+  finder->voltades = finder->prox->voltades;
+  finder->prox->voltades = num;
+
+  flotua = finder->gainexp;
+  finder->gainexp = finder->prox->gainexp;
+  finder->prox->gainexp = flotua;
+
+  num = finder->pos;
+  finder->pos = finder->prox->pos;
+  finder->prox->pos = num;
+}
+
+void fixant(pCon start)
+{
+  pCon antaux;
+  start->ant = NULL;
+  antaux = NULL;
+  for (pCon aux = start; aux != NULL; aux = aux->prox)
+  {
+    if (aux != NULL)
+    {
+      if (antaux != NULL)
+        aux->ant = antaux;
+      antaux = aux;
     }
   }
+}

@@ -30,3 +30,9 @@
 
 # Debug files
 *.dSYM/
+
+\.vscode/ipch/20926ac940a93012/
+
+\.vscode/ipch/60cf5d52ffc98fa9/
+
+\.vscode/ipch/fcaa8ad0b96fbe9f/

@@ -82,7 +82,7 @@ pCam selectPil(psS saveS)
     // guardar indexes
     aux->piloto = i;
     aux->nCorridas = 0;
-    
+
     aux->pontos = 0;
 
     aux->acidente=0;
@@ -123,3 +123,5 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
     freecorr(combina);
   }
 }
+
+// ordenar pCam ()
