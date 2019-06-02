@@ -104,7 +104,7 @@ pCon selCarPil(int nMaxP, psS saveS)
   int *ppp = NULL;
 
   // c -count / contar
-  int c;
+  int c, i;
 
   for (c = 0; c < saveS->nCarros; c++)
   {
@@ -161,7 +161,7 @@ pCon selCarPil(int nMaxP, psS saveS)
              saveS->pPilotos[c].nome, saveS->pPilotos[c].Id);
     }
   }
-
+  printf("erro não é destes\n");
   // verifar se existem pilotos para correr
   if (npp == 0)
   {
@@ -195,9 +195,17 @@ pCon selCarPil(int nMaxP, psS saveS)
     piloto = value;
     if (npp > 1)
       ppp = movete(ppp, value, npp);
+    else
+    {
+      break;
+    }
+
     if (ppp == NULL)
     {
+      free(ppp);
+      free(pcp);
       printf("erro a alucar memoria.\n");
+      return NULL;
     }
     npp--;
 
@@ -210,10 +218,22 @@ pCon selCarPil(int nMaxP, psS saveS)
     }
     carro = value;
     if (ncp > 1)
-      pcp = movete(pcp, value, ncp);
+      for (i = value; i < ncp - 1; i++)
+    pcp[i] = array[i + 1];
+  
+    
+
+  pcp = realloc(pcp, (ncp - 1) * sizeof(int));
+    else
+    {
+      break;
+    }
     if (pcp == NULL)
     {
+      free(ppp);
+      free(pcp);
       printf("erro a alucar memoria.\n");
+      return NULL;
     }
     ncp--;
 
@@ -230,7 +250,9 @@ pCon selCarPil(int nMaxP, psS saveS)
       return NULL;
     }
   }
+  printf("nem daqui??\n");
   int i;
+  printf("problemas aqui\n");
   for (i = 0; i < npp; i++)
     if (ppp[i] != -1)
       printf("O piloto %s não foi selecionado para a corrida por nao ter vaga para correr.\n", saveS->pPilotos[ppp[i]].nome);
@@ -249,6 +271,8 @@ int *movete(int *array, int value, int max)
 {
   for (int i = value; i < max - 1; i++)
     array[i] = array[i + 1];
+  if (max - 1 < 1)
+    return NULL;
 
   array = realloc(array, (max - 1) * sizeof(int));
   return array;
@@ -513,7 +537,9 @@ pCon ordterm2(pCon combina)
           do
           {
             //compara outra vez para os casos dentro do loop a andar para tras e transportar o que tiver um menor numero
-            if (finder->total > finder->prox->total)
+            if (finder->prox == NULL && finder->ant != NULL)
+              finder = finder->ant;
+            if (finder->total > finder->prox->total && finder->prox != NULL)
             {
               //se não for null vai pegar no anterior, pegar no seu ponteiro para o seguinte e trucar para o que esta a frente do actual
               if (finder->ant != NULL)
@@ -532,8 +558,8 @@ pCon ordterm2(pCon combina)
               paux->prox = finder;
               if (finder == inicio)
                 inicio = paux;
-              
-              printf("pre")
+
+              printf("loop lol\n");
             }
             //para que não ande para NULL
             if (finder->ant != NULL)
@@ -565,6 +591,7 @@ pCon ordterm(pCon combina)
   {
     if (center->total > center->prox->total)
     {
+      printf("espaço giro\n");
     }
   }
 }
