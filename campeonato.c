@@ -82,7 +82,11 @@ pCam selectPil(psS saveS)
     // guardar indexes
     aux->piloto = i;
     aux->nCorridas = 0;
+    
     aux->pontos = 0;
+
+    aux->acidente=0;
+    aux->gainpts=0;
     //verificar se já foi criado um elemento
     if (inicio == NULL)
     {
@@ -115,7 +119,7 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
     }
     
     combina = fazercorrida(saveS, combina, voltas, comp, maxpart, part);
-    
+
     freecorr(combina);
   }
 }

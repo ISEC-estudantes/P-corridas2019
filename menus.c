@@ -137,7 +137,7 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
     printf("Falta de memoria no computador.\n");
     return -1;
   }
-  printf("comp=%d", comp);
+  printf("comp=%d\n", comp);
 
   combina = fazercorrida(saveS, combina, voltas, comp, nMaxP, NULL);
   printf("parece que faz\n");
@@ -155,7 +155,9 @@ pCon adicionaCon(pCon inicio, int piloto, int carro)
   pCon aux = NULL;
   if (inicio == NULL)
   {
+    printf("malloc de menus.c:159\n");
     aux = malloc(sizeof(Con));
+    printf("nope\n");
     if (!aux)
     {
       printf("Falta de memoria.\n");
@@ -173,7 +175,9 @@ pCon adicionaCon(pCon inicio, int piloto, int carro)
     aux->prox = NULL;
     return aux;
   }
+  printf("malloc de menus.c:179\n");
   aux = malloc(sizeof(Con));
+  printf("nope\n");
   if (!aux)
   {
     printf("Falta de memoria.\n");

@@ -11,10 +11,10 @@ struct pilcam{
     int piloto;//index do piloto
     int nCorridas;//numero de corridas em que correu
     
-    int pontos;//pontos acumulados
+    float pontos;//pontos acumulados
     
     int acidente;//se ouve acidente durane a corrida
-    int gainpts;//pontos ganhos numa corrida por volta
+    float gainpts;//pontos ganhos numa corrida por volta
 
     pCam prox;//ponteiro para o anterior 
     pCam ant;//ponteiro para o seguinte

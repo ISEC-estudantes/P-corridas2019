@@ -67,9 +67,13 @@ void rempen(psS saveS);
 //apaga um valor de uma lista
 int *movete(int *array, int value, int max);
 
+//trocas os conteodos de duas estruturas do tipo combina
 void swap(pCon finder) ;
 
-void bubbleSort(pCon start) ;
+//erdena a lista ligada combina
+pCon bubbleSort(pCon start) ;
 
+//conrrige os pontos para o anterior
+void fixant(pCon start);
 
 #endif
