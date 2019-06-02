@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "campeonato.h"
 
 int mainmenu(psS saveS)
 {
@@ -18,7 +19,7 @@ int mainmenu(psS saveS)
   do
   {
 
-    printf("--------Main Menu--------\n"
+    printf("\n--------Main Menu--------\n"
            "Digite um numero para escolher(Mostrar opções-5)\n ");
     printf("\n=> ");
 
@@ -27,12 +28,6 @@ int mainmenu(psS saveS)
     if (scanf(" %d", &escolha) != 1)
       scanf(" %*[^\n]");
 
-    /*
-
-       if (escolha > 4 || escolha < 0)
-         printf("Escolha um numero entre 0 e 4\n=> ");
-
-     */
     switch (escolha)
     {
 
@@ -58,7 +53,7 @@ int mainmenu(psS saveS)
       break;
 
     case 4:
-      // place holder
+      campeonatomenu(saveS);
       break;
 
     case 0:
@@ -134,7 +129,7 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
     return -1;
   }
 
-  combina = fazercorrida(saveS, combina, voltas, comp, nMaxP);
+  combina = fazercorrida(saveS, combina, voltas, comp, nMaxP, NULL);
 
   printf("\nA CORRIDA TERMINOU!\n");
   //menu para ver os tempos

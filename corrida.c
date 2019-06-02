@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "campeonato.h"
 
 psS makegeral(pPi pilotos, int npilotos, pCar carros, int ncarros)
 {
@@ -167,10 +168,14 @@ pCon selCarPil(int nMaxP, psS saveS)
     return NULL;
   }
 
+  int selec;
   if (npp < ncp)
-    nMaxP = npp;
+    selec = npp;
   else
-    nMaxP = ncp;
+    selec = ncp;
+
+    if(selec<nMaxP)
+      nMaxP = selec;
 
   // ponteiro para a primeira estrutura da lista ligada das combinações dos
   // participantes
@@ -207,9 +212,7 @@ pCon selCarPil(int nMaxP, psS saveS)
     printf("Corredor %d:\n\tNome do piloto:%s\n\tId do carro:%d\n\n", c + 1,
            saveS->pPilotos[piloto].nome, saveS->pCarros[carro].Id);
     // gravar as coisas numa lista ligada
-    printf("problemas a refazer o adicionaCon\n");
     combina = adicionaCon(combina, piloto, carro);
-    printf(" NOPE\n");
     if (combina == NULL)
     {
       printf("fazer free\n");
@@ -218,7 +221,15 @@ pCon selCarPil(int nMaxP, psS saveS)
       return NULL;
     }
   }
-  printf("sem problemas a fazer return\n");
+  int i;
+  for (i = 0; i < npp; i++)
+    if (ppp[i] != -1)
+      printf("O piloto %s não foi selecionado para a corrida por nao ter vaga para correr.\n", saveS->pPilotos[ppp[i]].nome);
+
+  for (i = 0; i < ncp; i++)
+    if (pcp[i] != -1)
+      printf("O carro com Id %d não foi selecionado para a corrida nao ter vaga para correr.", saveS->pCarros[pcp[i]].Id);
+
   return combina;
 }
 
@@ -302,54 +313,6 @@ void verPos(pCon combina, psS saveS, int voltastotal, int voltaact, int esperar)
       printf("a esperar\n"); //espera(1);
 }
 
-pCon ordTem(pCon inicio)
-{
-  int i = 0, f = 0;
-  if (inicio == NULL || inicio->prox == NULL)
-    return inicio;
-
-  // para ordenar aquele que esta em primeiro, mete se o que estiver em
-  // primeiro na lista ligada
-  // verficar se o segunte mais pequeno do que o actual
-  pCon auxfinder, finder, paux;
-  //andar para a direita
-  for (auxfinder = inicio->prox; auxfinder->prox != NULL;
-       auxfinder = auxfinder->prox)
-  {
-
-    if (auxfinder->total >
-        auxfinder->prox->total)
-    {
-      // se n for começa a andar para tras a trocar
-      for (finder = auxfinder; finder->ant != NULL; finder->ant)
-        if (finder->total > finder->prox->total)
-        {
-
-          // ver se existe algo antes do finder
-          if (finder->ant != NULL)
-            finder->prox = finder->ant->prox;
-
-          if (finder->prox->prox != NULL)
-            finder->prox->prox->ant = finder;
-
-          paux = finder->ant;
-          finder->ant = finder->prox;
-          finder->prox->ant = paux;
-
-          paux = finder->ant->prox;
-          finder->ant->prox = finder;
-          finder->prox = paux;
-          finder = finder->prox;
-        }
-    }
-  }
-  while (inicio->ant != NULL)
-    inicio = inicio->ant;
-  return inicio;
-}
-
-//novo orenador
-
 void freecorr(pCon combina)
 {
   pCon aux = combina, paux;
@@ -364,6 +327,7 @@ void freecorr(pCon combina)
   }
 }
 
+//isto na verdade define as experiencia ( ^ _ ^ ')
 void calPontos(psS saveS, pCon combina)
 {
   pCon aux;
@@ -377,20 +341,6 @@ void calPontos(psS saveS, pCon combina)
     else
       saveS->pPilotos[aux->piloto].exp += aux->gainexp;
   }
-}
-
-pCon novoord(psS saveS, pCon combina, int volta)
-{
-  pCon aux, antaux, paux;
-  int renova;
-  totalde(combina, volta);
-  int loop = 0;
-  //loop de reorganização
-  for (int i = 0; i < 2; i++)
-    while (loop == 1)
-      loop = algord(combina, saveS);
-
-  return combina;
 }
 
 pCon totalde(pCon combina, int volta)
@@ -408,64 +358,20 @@ pCon totalde(pCon combina, int volta)
   }
 }
 
-int algord(pCon combina, psS saveS)
-{
-  pCon aux, antaux;
-  int renova = 0;
-  for (aux = combina; aux->prox != NULL; aux = aux->prox)
-  {
-    if (aux->total = aux->prox->total)
-      if (saveS->pCarros[aux->carro].pot > saveS->pCarros[aux->prox->carro].pot)
-        renova = trocaPon(&combina, &aux, &antaux);
-      else if (saveS->pCarros[aux->carro].pot = saveS->pCarros[aux->prox->carro].pot)
-        if (saveS->pPilotos[aux->piloto].exp > saveS->pPilotos[aux->prox->piloto].exp)
-          renova = trocaPon(&combina, &aux, &antaux);
-        else if (aux->total > aux->prox->total)
-          renova = trocaPon(&combina, &aux, &antaux);
-
-    if (renova == 1)
-      return 1;
-    antaux = aux;
-  }
-  return 0;
-}
-
-int trocaPon(pCon *combina, pCon *aux, pCon *antaux)
-{
-  pCon paux;
-
-  //verificar os casos do que pode estar no inicio
-  if ((*aux) == (*combina))
-    (*combina) = (*aux)->prox;
-  else
-    (*antaux)->prox = (*aux)->prox;
-
-  //fazer o geral
-  paux = (*aux)->prox;
-  (*aux)->prox = (*aux)->prox->prox;
-  paux->prox = (*aux);
-
-  return 1;
-}
-
-pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP)
+pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam part)
 {
 
   pCon finder, finder2;
   int idade, ordenado = 0, *aux, i, ndes = 0;
-  Car scarro;
-  Pi spiloto;
+
   int prob, c;
   // loop de voltas
   for (c = 0; c < voltas; c++)
   {
-    printf("volta %d\n", c + 1);
     // loop para passar por todas as combinações
     for (finder = combina; finder != NULL; finder = finder->prox)
     {
       // estruturas dos carros e pilotos desta combinação
-      spiloto = saveS->pPilotos[finder->piloto];
-      scarro = saveS->pCarros[finder->carro];
 
       // criar vetor dos resultdos das voltas
       if (c == 0)
@@ -494,14 +400,14 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP)
           // %s\n",
           //        saveS->pPilotos[finder->piloto].nome);
           finder->des = 1;
-          spiloto.imp = 2;
-          scarro.avar = 1;
+          saveS->pPilotos[finder->piloto].imp = 3;
+          saveS->pCarros[finder->carro].avar = 1;
           finder->gainexp = -1;
-          if (spiloto.exp < 1)
-            spiloto.exp = 0;
+          if (saveS->pPilotos[finder->piloto].exp < 1)
+            saveS->pPilotos[finder->piloto].exp = 0;
           else
           {
-            spiloto.exp -= 1;
+            saveS->pPilotos[finder->piloto].exp -= 1;
           }
 
           finder->voltades = c;
@@ -515,26 +421,119 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP)
       }
       if (finder->des == 0)
       {
-        finder->tempo[c] = calculaSegundos(finder->idade, spiloto.peso,
-                                           spiloto.exp, scarro.pot, comp);
+        finder->tempo[c] = calculaSegundos(finder->idade, saveS->pPilotos[finder->piloto].peso, saveS->pPilotos[finder->piloto].exp, saveS->pCarros[finder->carro].pot, comp);
         finder->total += finder->tempo[c];
       }
       if (finder->des == 1)
         finder->tempo[c] = -1;
     }
-    printf("ordenar as merdas\n");
     //organiza a lista ligada
     //combina = ordTem(combina); antigo organizador
-    combina = novoord(saveS, combina, c); //novo organizador
-    printf("nope\n");
+    combina = ordterm2(combina); //novo organizador
     if (ndes == nMaxP)
       break;
 
     //printa as posições
     verPos(combina, saveS, voltas, c, 1);
+    if(part!=NULL){
+      printf("entering\n");
+    }
   }
 
   calPontos(saveS, combina);
-
+  rempen(saveS);
   return combina;
+}
+
+pCon ordterm2(pCon combina)
+{
+
+  pCon paux, inicio = combina;
+  //caso o inicio seja null ele retorna null
+  if (inicio == NULL)
+    return NULL;
+
+  //caso o seja anterior seja null e o seguinte tambem para
+  if (inicio->ant == NULL && inicio->prox == NULL)
+    return inicio;
+
+  //caso sejam so 2
+  if (inicio->prox->prox == NULL)
+    if (inicio->total > inicio->prox->total)
+    {
+      inicio->ant = inicio->prox;
+      inicio->prox = NULL;
+      inicio->ant->ant = NULL;
+      inicio->ant->prox = inicio;
+      paux = inicio->ant;
+      inicio = paux;
+      return inicio;
+    }
+
+  // para ordenar aquele que esta em primeiro, mete se o que estiver em
+  // primeiro na lista ligada
+  // verficar se o segunte mais pequeno do que o actual
+
+  pCon finder;
+  //andar para a direita
+  for (finder = inicio; finder != NULL;
+       finder = finder->prox)
+    //ve se o actual não esta a null só porque sim
+    if (finder != NULL)
+      // ve se o proximo esta a null para não morrer
+      if (finder->prox != NULL)
+        //compara os tempos
+        if (finder->total > finder->prox->total)
+          //entra num ciclo qu vai levar o finder(actual) para o inicio
+          do
+          {
+            //compara outra vez para os casos dentro do loop a andar para tras e transportar o que tiver um menor numero
+            if (finder->total > finder->prox->total)
+            {
+              //se não for null vai pegar no anterior, pegar no seu ponteiro para o seguinte e trucar para o que esta a frente do actual
+              if (finder->ant != NULL)
+                finder->ant->prox = finder->prox;
+              //auxiliar para não perdero que esta no anterior para depois substituir para o ponteiro a apontar para o anterior do finder para apontar para o que estava aseguinte
+              paux = finder->ant;
+              finder->ant = finder->prox;
+
+              finder->ant->ant = paux;
+              paux = finder->prox;
+              finder->prox = paux->prox;
+              if (paux->prox != NULL)
+                paux->prox->ant = finder;
+              paux->prox = finder;
+              if (finder == inicio)
+                paux = inicio;
+              finder = paux;
+            }
+            finder = finder->ant;
+          } while (finder->ant != NULL);
+
+  return inicio;
+}
+
+void rempen(psS saveS)
+{
+  int i;
+  for(i=0; i < saveS->nPilotos; i++)
+  if(saveS->pPilotos[i].imp!=0){
+    saveS->pPilotos[i].imp-=1;
+  }
+  for(i=0; i < saveS->nCarros; i++)
+  if(saveS->pCarros[i].avar!=0){
+    saveS->pCarros[i].avar=0;
+  }
+  
+}
+pCon ordterm(pCon combina){
+  pCon next, last, center;
+
+  for(center=combina;center->prox!=NULL;center=center->prox){
+    if(center->total>center->prox->total){
+      
+    }
+  }
+
+
 }

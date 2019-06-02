@@ -9,6 +9,7 @@
 #include "corrida.h"
 #include "utils.h"
 #include "menus.h"
+#include "campeonato.h"
 
 psS inicializa()
 {
@@ -50,8 +51,7 @@ int main(int argc, char **argv)
   if (saveS == NULL)
     return 1;
 
-   corridamenu( saveS, 5, 500, 2);
-  //mainmenu(saveS);
+  mainmenu(saveS);
 
   return 0;
 }
