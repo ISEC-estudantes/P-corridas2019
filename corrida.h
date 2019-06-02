@@ -67,4 +67,9 @@ void rempen(psS saveS);
 //apaga um valor de uma lista
 int *movete(int *array, int value, int max);
 
+void swap(pCon finder) ;
+
+void bubbleSort(pCon start) ;
+
+
 #endif

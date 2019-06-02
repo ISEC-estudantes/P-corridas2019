@@ -114,8 +114,8 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
       return -1;
     }
     
-    fazercorrida(saveS, combina, voltas, comp, maxpart, part);
-
-
+    combina = fazercorrida(saveS, combina, voltas, comp, maxpart, part);
+    
+    freecorr(combina);
   }
 }

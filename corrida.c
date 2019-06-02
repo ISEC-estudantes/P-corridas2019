@@ -185,46 +185,30 @@ pCon selCarPil(int nMaxP, psS saveS)
     if (npp == 0 || ncp == 0)
       break;
     // buscar randow piloto
-    value = intUniformRnd(0, npp - 1);
-
-    piloto = ppp[value];
-    if (npp > 1)
+    do
     {
-      for (i = value; i < npp - 1; i++)
-        ppp[i] = ppp[i + 1];
-
-      ppp = realloc(pcp, (npp - 1) * sizeof(int));
-    }
-    if (ppp == NULL)
-    {
-      free(ppp);
-      free(pcp);
-      printf("erro a alucar memoria.\n");
-      return NULL;
-    }
-    npp--;
-
+      value = intUniformRnd(0, npp - 1);
+      if (ppp[value] == -1)
+      {
+        continue;
+      }
+      piloto = value;
+      ppp[value] = -1;
+      break;
+    } while (ppp[value] == -1);
     // buscar randow carro
-    // buscar um numero aleatorio
-    value = intUniformRnd(0, ncp - 1);
-
-    carro = pcp[value];
-    if (ncp > 1)
+    do
     {
-      for (i = value; i < ncp - 1; i++)
-        pcp[i] = pcp[i + 1];
-
-      pcp = realloc(pcp, (ncp - 1) * sizeof(int));
-    }
-    if (pcp == NULL)
-    {
-      free(ppp);
-      free(pcp);
-      printf("erro a alucar memoria.\n");
-      return NULL;
-    }
-    ncp--;
-
+      // buscar um numero aleatorio
+      value = intUniformRnd(0, npp - 1);
+      if (pcp[value] == -1)
+      {
+        continue;
+      }
+      carro = value;
+      pcp[value] = -1;
+      break;
+    } while (pcp[value] == -1);
     // printar resultados das combinações
     printf("Corredor %d:\n\tNome do piloto:%s\n\tId do carro:%d\n\n", c + 1,
            saveS->pPilotos[piloto].nome, saveS->pCarros[carro].Id);
@@ -246,9 +230,8 @@ pCon selCarPil(int nMaxP, psS saveS)
   for (i = 0; i < ncp; i++)
     if (pcp[i] != -1)
       printf("O carro com Id %d não foi selecionado para a corrida nao ter vaga para correr.", saveS->pCarros[pcp[i]].Id);
+  printf("este free?");
 
-  free(ppp);
-  free(pcp);
   return combina;
 }
 
@@ -328,7 +311,8 @@ void verPos(pCon combina, psS saveS, int voltastotal, int voltaact, int esperar)
         if (i != 0)
           sprintf(output, "%s + ", output);
 
-        sprintf(output, "%s%d", output, aux->tempo[i]);
+        if (aux->tempo[i] > -1)
+          sprintf(output, "%s%d", output, aux->tempo[i]);
         total += aux->tempo[i];
       }
 
@@ -367,7 +351,7 @@ void calPontos(psS saveS, pCon combina)
       if (saveS->pPilotos[aux->piloto].exp < 1)
         saveS->pPilotos[aux->piloto].exp = 0;
       else
-        saveS->pPilotos[aux->piloto].exp -= 1;
+        saveS->pPilotos[aux->piloto].exp += -1;
     else
       saveS->pPilotos[aux->piloto].exp += aux->gainexp;
   }
@@ -401,7 +385,6 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
     // loop para passar por todas as combinações
     for (finder = combina; finder != NULL; finder = finder->prox)
     {
-      printf("isto é um loop\n");
       // estruturas dos carros e pilotos desta combinação
 
       // criar vetor dos resultdos das voltas
@@ -445,7 +428,6 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
           ndes++;
         }
       }
-      printf("ele saiu\n");
       if (ndes == nMaxP)
       {
         printf("Todos os pilotos tiveram acidentes!\n");
@@ -462,20 +444,18 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
     //organiza a lista ligada
     //combina = ordTem(combina); antigo organizador
     printf("entrou no ord\n");
-    combina = ordterm2(combina); //novo organizador
+    bubbleSort(combina); //novo organizador
     printf("saiu do ord\n");
     if (ndes == nMaxP)
       break;
-
     //printa as posições
     verPos(combina, saveS, voltas, c, 1);
-    if (part != NULL)
-    {
-    }
   }
 
   calPontos(saveS, combina);
+  printf("passa do calpontos\n");
   rempen(saveS);
+  printf("não é o rempen");
   return combina;
 }
 
@@ -483,6 +463,9 @@ pCon ordterm2(pCon combina)
 {
 
   pCon paux, inicio = combina;
+  int num, *pnum;
+  float flotua;
+  pCon finder;
   //caso o inicio seja null ele retorna null
   if (inicio == NULL)
     return NULL;
@@ -495,12 +478,8 @@ pCon ordterm2(pCon combina)
   if (inicio->prox->prox == NULL)
     if (inicio->total > inicio->prox->total)
     {
-      inicio->ant = inicio->prox;
-      inicio->prox = NULL;
-      inicio->ant->ant = NULL;
-      inicio->ant->prox = inicio;
-      paux = inicio->ant;
-      inicio = paux;
+
+      swap(inicio);
       return inicio;
     }
 
@@ -508,9 +487,8 @@ pCon ordterm2(pCon combina)
   // primeiro na lista ligada
   // verficar se o segunte mais pequeno do que o actual
 
-  pCon finder;
   //andar para a direita
-  for (finder = inicio; finder != NULL;
+  for (finder = inicio; finder->prox != NULL;
        finder = finder->prox)
     //ve se o actual não esta a null só porque sim
     if (finder != NULL)
@@ -521,33 +499,12 @@ pCon ordterm2(pCon combina)
           //entra num ciclo qu vai levar o finder(actual) para o inicio
           do
           {
-            //compara outra vez para os casos dentro do loop a andar para tras e transportar o que tiver um menor numero
-            if (finder->prox == NULL && finder->ant != NULL)
-              finder = finder->ant;
             if (finder->total > finder->prox->total && finder->prox != NULL)
             {
-              //se não for null vai pegar no anterior, pegar no seu ponteiro para o seguinte e trucar para o que esta a frente do actual
-              if (finder->ant != NULL)
-                finder->ant->prox = finder->prox;
-              //auxiliar para não perdero que esta no anterior para depois substituir para o ponteiro a apontar para o anterior do finder para apontar para o que estava aseguinte
-              paux = finder->ant;
-              finder->ant = finder->prox;
-
-              finder->ant->ant = paux;
-
-              paux = finder->prox;
-              finder->prox = paux->prox;
-              if (paux->prox != NULL)
-                paux->prox->ant = finder;
-
-              paux->prox = finder;
-              if (finder == inicio)
-                inicio = paux;
-
-              printf("loop lol\n");
+              swap(finder);
             }
             //para que não ande para NULL
-            if (finder->ant != NULL)
+            if (finder->ant)
               finder = finder->ant;
           } while (finder->ant != NULL);
 
@@ -560,23 +517,83 @@ void rempen(psS saveS)
   for (i = 0; i < saveS->nPilotos; i++)
     if (saveS->pPilotos[i].imp != 0)
     {
-      saveS->pPilotos[i].imp -= 1;
+      saveS->pPilotos[i].imp += -1;
     }
+
   for (i = 0; i < saveS->nCarros; i++)
     if (saveS->pCarros[i].avar != 0)
     {
       saveS->pCarros[i].avar = 0;
     }
 }
-pCon ordterm(pCon combina)
-{
-  pCon next, last, center;
 
-  for (center = combina; center->prox != NULL; center = center->prox)
+void bubbleSort(pCon start)
+{
+  int swapped, i;
+  pCon ptr1;
+  pCon lptr = NULL;
+
+  /* Checking for empty list */
+  if (start == NULL)
+    return;
+
+  do
   {
-    if (center->total > center->prox->total)
+    swapped = 0;
+    ptr1 = start;
+
+    while (ptr1->prox != lptr)
     {
-      printf("espaço giro\n");
+      if (ptr1->total > ptr1->prox->total)
+      {
+        swap(ptr1);
+        swapped = 1;
+      }
+      ptr1 = ptr1->prox;
     }
-  }
+    lptr = ptr1;
+  } while (swapped);
+}
+
+void swap(pCon finder)
+{
+
+  int num, *pnum;
+  float flotua;
+
+  num = finder->total;
+  finder->total = finder->prox->total;
+  finder->prox->total = num;
+
+  num = finder->piloto;
+  finder->piloto = finder->prox->piloto;
+  finder->prox->piloto = num;
+
+  num = finder->idade;
+  finder->idade = finder->prox->idade;
+  finder->prox->idade = num;
+
+  num = finder->carro;
+  finder->carro = finder->prox->carro;
+  finder->prox->carro = num;
+
+  pnum = finder->tempo;
+  finder->tempo = finder->prox->tempo;
+  finder->prox->tempo = pnum;
+
+  num = finder->des;
+  finder->des = finder->prox->des;
+  finder->prox->des = num;
+
+  num = finder->voltades;
+  finder->voltades = finder->prox->voltades;
+  finder->prox->voltades = num;
+
+  flotua = finder->gainexp;
+  finder->gainexp = finder->prox->gainexp;
+  finder->prox->gainexp = flotua;
+
+  num = finder->pos;
+  finder->pos = finder->prox->pos;
+  finder->prox->pos = num;
 }

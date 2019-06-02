@@ -50,7 +50,7 @@ int main(int argc, char **argv)
   psS saveS = inicializa();
   if (saveS == NULL)
     return 1;
-
+  
   mainmenu(saveS);
 
   return 0;
