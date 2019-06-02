@@ -14,7 +14,7 @@
 //funcção inicial do programa
 psS inicializa()
 {
-  initRandom();
+  
 
   // ler ficheiros de texto dos pilotos e carros e guardar as suas variaveis
   //ler pilotos
@@ -47,7 +47,7 @@ psS inicializa()
 
 int main(int argc, char **argv)
 {
-
+  initRandom();
   psS saveS = inicializa();
   if (saveS == NULL)
     return 1;

@@ -16,7 +16,9 @@ typedef struct saverS sS, *psS;
 struct carro {
   int Id;  // id do carro;valor inteiro positivo que deve ser único entre todos
            // os carros
+           
   int pot; // potencia do carro; valor inteiro positivo
+
   int avar; // se o carro estiver variado 1, se nao 0; um carro pode ou não
             // estar avariado. Um carro fica avariado quando está envolvido num
             // acidente. Depois disso fica 1 corrida sem poder participar
@@ -35,10 +37,6 @@ int salvaC(psS saveS);
 
 //printa a estrura inteira dos carros
 void printCar(psS saveS) ;
-
-//selectina os carros sem avaria para a corrida
-//  recebe a saveS(ver leitura.h) e um ponteiro para um inteiro que tem o valor do maximo de pilotos
-int zcarDis(psS saveS, int *max, int **carL) ;
 
 #endif /* CARROS_H */
 

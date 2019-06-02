@@ -333,8 +333,7 @@ void verPos(pCon combina, psS saveS, int voltastotal, int voltaact, int esperar)
   }
   printf("\t-------------\n\n");
   if (esperar == 1)
-    if (voltastotal != voltaact)
-      espera(5);
+    espera(5);
 }
 
 void freecorr(pCon combina)
@@ -485,7 +484,7 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
     if (ndes == nMaxP)
       break;
     //printa as posições
-    verPos(combina, saveS, voltas, c, 0);
+    verPos(combina, saveS, voltas, c, 1);
     if (part != NULL)
     {
       for (pCam camp = part; camp != NULL; camp = camp->prox)
@@ -523,7 +522,6 @@ void adicionapontos(pCon combina, pCam part)
 
 pCon ordterm2(pCon combina)
 {
-
   pCon paux, inicio = combina;
   int num, *pnum;
   float flotua;

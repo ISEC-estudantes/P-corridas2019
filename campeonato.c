@@ -13,6 +13,8 @@
 #include <string.h>
 #include "campeonato.h"
 
+#define bin "campeonato.bin"
+
 int campeonatomenu(psS saveS)
 {
 
@@ -109,7 +111,7 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
 {
   pCon combina;
   int erro;
-  for (int i = numdone; i < numall; i++)
+  for (int i = numdone; i <= numall; i++)
   {
     combina = selCarPil(maxpart, saveS);
     printf("isto é um loop\n");
@@ -118,7 +120,7 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
       printf("Falta de memoria no computador.\n");
       return -1;
     }
-      printf("\n CARRIDA %d\n\n",i+1);
+    printf("\n CARRIDA %d\n\n", i + 1);
     combina = fazercorrida(saveS, combina, voltas, comp, maxpart, part);
     freecorr(combina);
 
@@ -158,28 +160,34 @@ int gravaBi(pCam part, int numdone, int numall, int voltas, int comp, int maxpar
 
 int lerBi(psS saveS)
 {
+
   FILE *f = fopen("campeonato.bin", "rb");
   if (f == NULL)
   {
 
     printf("Erro a ler ter permições de escrita no ficheiro campeonato.bin\n");
     return 1;
-
   }
   pCam inicio = NULL, aux = NULL, antaux = NULL;
-  
+
   int n = 0, i, gainpts, acidente, nCorridas, correr, pontos, piloto, numdone, voltas, comp, maxpart;
   //numero de corridas feitas
-  fread(&numdone, sizeof(int), 1, f);
-  fread(&voltas, sizeof(int), 1, f);
-  fread(&comp, sizeof(int), 1, f);
-  fread(&maxpart, sizeof(int), 1, f);
-  fread(&maxpart, sizeof(int), 1, f);
+  if ((fread(&numdone, sizeof(int), 1, f) != 1) || (fread(&voltas, sizeof(int), 1, f) != 1) ||
+      (fread(&comp, sizeof(int), 1, f) != 1) || (fread(&maxpart, sizeof(int), 1, f) != 1) ||
+      (fread(&maxpart, sizeof(int), 1, f) != 1))
+  {
+    fprintf(stderr, "Erro a criar o ficheiro %s\n", bin);
+    return -1;
+  }
   for (i = 0; i < maxpart; i++)
   {
-    fread(&piloto, sizeof(int), 1, f);
-    fread(&nCorridas, sizeof(int), 1, f);
-    fread(&pontos, sizeof(float), 1, f);
+    if ((fread(&piloto, sizeof(int), 1, f) != 1) ||
+        (fread(&nCorridas, sizeof(int), 1, f) != 1) ||
+        (fread(&pontos, sizeof(float), 1, f)))
+    {
+      fprintf(stderr, "Erro a criar o ficheiro %s\n", bin);
+      return -1;
+    }
 
     aux = malloc(sizeof(Cam));
     if (aux == NULL)
