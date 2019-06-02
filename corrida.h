@@ -58,6 +58,9 @@ pCon totalde(pCon combina,int volta);
 //algoritmo da corrida
 pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp,int nMaxP, pCam campeonato);
 
+//adiciona os pontos para os participantes do campeonato
+void adicionapontos(pCon combina, pCam part);
+
 //novo algoritmo para ordenar a lista ligada
 pCon ordterm2(pCon inicio);
 

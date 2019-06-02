@@ -306,7 +306,7 @@ void verPos(pCon combina, psS saveS, int voltastotal, int voltaact, int esperar)
   {
 
     if (aux->tempo[voltaact] == -1)
-      printf("%s (Id: %d) / Carro %d desistiu na volta %d.\n", saveS->pPilotos[aux->piloto].nome, saveS->pPilotos[aux->piloto].Id, saveS->pCarros[aux->carro].Id, aux->voltades + 1);
+      printf("%s (Id: %d) / Carro %d desistiu na volta %d.\n", saveS->pPilotos[aux->piloto].nome, saveS->pPilotos[aux->piloto].Id, saveS->pCarros[aux->carro].Id, aux->voltades);
 
     if (aux->tempo[voltaact] != -1)
     {
@@ -436,7 +436,9 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
           {
             for (pCam camp; camp != NULL; camp->prox)
               if (camp->piloto == finder->piloto)
+              {
                 camp->acidente = 1;
+              }
           }
           if (saveS->pPilotos[finder->piloto].exp < 1)
             saveS->pPilotos[finder->piloto].exp = 0;
@@ -445,7 +447,7 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
             saveS->pPilotos[finder->piloto].exp = saveS->pPilotos[finder->piloto].exp - 1;
           }
 
-          finder->voltades = c;
+          finder->voltades = c + 1;
           ndes++;
         }
       }
@@ -493,14 +495,30 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
   }
   if (part != NULL)
   {
-    int pontos = 5;
-    for (finder2 = combina; finder2 != NULL; finder2 = finder2->prox)
-      ;
+    for (pCam camp = part; camp != NULL; camp = camp->prox)
+      if (part->acidente == 1)
+        part->pontos = 0;
+      else
+        adicionapontos(combina, part);
   }
+
   calPontos(saveS, combina);
   rempen(saveS);
 
   return combina;
+}
+
+void adicionapontos(pCon combina, pCam part)
+{
+  int pontos = 5;
+  for (pCon finder2 = combina; finder2 != NULL; finder2 = finder2->prox)
+    for (pCam camp = part; camp != NULL; camp = camp->prox)
+      if (combina->piloto == part->piloto && finder2->voltades == 0)
+      {
+        part->pontos += pontos--;
+        if (pontos == 0)
+          return;
+      }
 }
 
 pCon ordterm2(pCon combina)

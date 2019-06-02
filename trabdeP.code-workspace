@@ -8,7 +8,11 @@
 		"files.associations": {
 			"stdio.h": "c",
 			"string.h": "c",
-			"array": "c"
+			"array": "c",
+			"menus.h": "c",
+			"utils.h": "c",
+			"stdlib.h": "c",
+			"campeonato.h": "c"
 		}
 	}
 }

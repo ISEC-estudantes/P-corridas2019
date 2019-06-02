@@ -119,9 +119,15 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
     }
     
     combina = fazercorrida(saveS, combina, voltas, comp, maxpart, part);
-
     freecorr(combina);
+
+
+    
+    gravaBi(saveS, combina, part);
+
   }
 }
 
-// ordenar pCam ()
+//meter os participantes no ficheiro binario
+gravaBi(psS saveS, pCam part, int numdone, int numall, int voltas, int comp, int maxpar)
+

@@ -11,6 +11,7 @@
 #include "menus.h"
 #include "campeonato.h"
 
+//funcção inicial do programa
 psS inicializa()
 {
   initRandom();
@@ -50,7 +51,7 @@ int main(int argc, char **argv)
   psS saveS = inicializa();
   if (saveS == NULL)
     return 1;
-  
+
   mainmenu(saveS);
 
   return 0;

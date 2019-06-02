@@ -13,6 +13,7 @@ struct pilcam{
     
     float pontos;//pontos acumulados
     
+    int correr; //esta a correr, 1 se esta a correr na corrida actual ou 0 se não estiver a correr
     int acidente;//se ouve acidente durane a corrida
     float gainpts;//pontos ganhos numa corrida por volta
 
