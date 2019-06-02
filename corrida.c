@@ -111,7 +111,8 @@ pCon selCarPil(int nMaxP, psS saveS)
     if (saveS->pCarros[c].avar == 0)
     {
       ncp++;
-      if (c == 1)
+      printf("ncp=%d\n", ncp);
+      if (ncp == 1)
         pcp = malloc(sizeof(int));
       else
         pcp = realloc(pcp, sizeof(int) * ncp);
@@ -142,7 +143,8 @@ pCon selCarPil(int nMaxP, psS saveS)
     if (saveS->pPilotos[c].imp == 0)
     {
       npp++;
-      if (c == 1)
+      printf("npp=%d\n", npp);
+      if (npp == 1)
         ppp = malloc(sizeof(int));
       else
         ppp = realloc(ppp, sizeof(int) * ncp);
@@ -230,8 +232,9 @@ pCon selCarPil(int nMaxP, psS saveS)
   for (i = 0; i < ncp; i++)
     if (pcp[i] != -1)
       printf("O carro com Id %d não foi selecionado para a corrida nao ter vaga para correr.", saveS->pCarros[pcp[i]].Id);
-  printf("este free?");
 
+  free(ppp);
+  free(pcp);
   return combina;
 }
 
@@ -378,7 +381,7 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
   pCon finder, finder2;
   int idade, ordenado = 0, *aux, i, ndes = 0;
 
-  int prob, c;
+  int prob, c, erro;
   // loop de voltas
   for (c = 0; c < voltas; c++)
   {
@@ -421,7 +424,7 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
             saveS->pPilotos[finder->piloto].exp = 0;
           else
           {
-            saveS->pPilotos[finder->piloto].exp -= 1;
+            saveS->pPilotos[finder->piloto].exp =saveS->pPilotos[finder->piloto].exp - 1;
           }
 
           finder->voltades = c;
@@ -435,7 +438,19 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
       }
       if (finder->des == 0)
       {
+        erro=0;
+        do{
         finder->tempo[c] = calculaSegundos(finder->idade, saveS->pPilotos[finder->piloto].peso, saveS->pPilotos[finder->piloto].exp, saveS->pCarros[finder->carro].pot, comp);
+        erro++;
+        if(erro==3){
+          printf("algo está mal com os tempos\n"
+          "\targumentos:\n"
+          "finder->idade=%d\n saveS->pPilotos[finder->piloto].peso=%d\n saveS->pPilotos[finder->piloto].exp=%d\n saveS->pCarros[finder->carro].pot=%d\n comp=%d\n",finder->idade, saveS->pPilotos[finder->piloto].peso, saveS->pPilotos[finder->piloto].exp, saveS->pCarros[finder->carro].pot, comp);
+
+          return NULL;
+        }
+        }while(finder->tempo[c]<0 || finder->tempo[c]>1000);
+        
         finder->total += finder->tempo[c];
       }
       if (finder->des == 1)
@@ -443,9 +458,7 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
     }
     //organiza a lista ligada
     //combina = ordTem(combina); antigo organizador
-    printf("entrou no ord\n");
     bubbleSort(combina); //novo organizador
-    printf("saiu do ord\n");
     if (ndes == nMaxP)
       break;
     //printa as posições

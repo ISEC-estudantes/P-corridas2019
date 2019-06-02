@@ -101,25 +101,34 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
     // comp ---- comprimento da pista entre 500 - 1000
     // nCpart -- numero de maximo de carros que pode participar
     printf("\n---------- Corrida \\ treino ----------\n\n");
-    while (voltas < 5 || voltas > 10)
+
+    do
     {
       printf("\nQuantas voltas tem a corrida?[5-10]\n=> ");
 
       if (scanf("%d", &voltas) != 1)
         scanf(" %*[^\n]");
-    }
-    while (comp < 500 || comp > 1000)
+    } while (voltas != 0 && (voltas < 5 || voltas > 10));
+    if (voltas == 0)
+      return 0;
+
+    do
     {
       printf("\nQual o comprimento da pista?[500-1000]\n=> ");
       if (scanf("%d", &comp) != 1)
         scanf(" %*[^\n]");
-    }
-    while (nMaxP < 0)
+    } while (comp != 0 && (comp < 500 || comp > 1000));
+    if (comp == 0)
+      return 0;
+
+    do
     {
       printf("\nQuantos carros poderam correr nesta pista?\n=> ");
       if (scanf("%d", &nMaxP) != 1)
         scanf(" %*[^\n]");
-    }
+    } while (nMaxP < 0);
+    if (nMaxP == 0)
+      return 0;
   }
 
   pCon combina = selCarPil(nMaxP, saveS);
@@ -128,10 +137,10 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
     printf("Falta de memoria no computador.\n");
     return -1;
   }
- printf("sera que faz corrida?");
+  printf("comp=%d", comp);
 
   combina = fazercorrida(saveS, combina, voltas, comp, nMaxP, NULL);
-printf("parece que faz\n");
+  printf("parece que faz\n");
   printf("\nA CORRIDA TERMINOU!\n");
   //menu para ver os tempos
   menufinalcor(saveS, combina, voltas, nMaxP);

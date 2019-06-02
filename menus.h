@@ -6,7 +6,7 @@
 #ifndef MENUS_H
 #define MENUS_H
 
-#define ACIDENTE 0.05
+#define ACIDENTE 0.00
 
 typedef struct piloto Pi, *pPi;
 typedef struct carro Car, *pCar;
