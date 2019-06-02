@@ -55,7 +55,7 @@ int campeonatomenu(psS saveS)
   } while (nMaxP < 0);
   if (nMaxP == 0)
     return 0;
-    
+
   //cria uma lista ligada para os registos dos pilotos para o campeonato
   pCam parti = selectPil(saveS);
 
@@ -107,13 +107,13 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
   for (int i = numdone; i < numall; i++)
   {
     combina = selCarPil(maxpart, saveS);
-
+    printf("isto é um loop\n");
     if (combina == NULL)
     {
       printf("Falta de memoria no computador.\n");
       return -1;
     }
-
+    
     fazercorrida(saveS, combina, voltas, comp, maxpart, part);
 
 

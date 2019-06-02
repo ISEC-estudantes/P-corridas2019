@@ -86,6 +86,7 @@ int calIda(psS saveS, int indexpiloto)
 
 pCon selCarPil(int nMaxP, psS saveS)
 {
+  printf("o erro é aqui[1]\n");
   /****************************************/
 
   /******ASSOCIAR CARROS E PILOTOS*******/
@@ -173,9 +174,9 @@ pCon selCarPil(int nMaxP, psS saveS)
     selec = npp;
   else
     selec = ncp;
-
-    if(selec<nMaxP)
-      nMaxP = selec;
+  printf("npp %d ncp %d selec %d nmaxp %d\n", npp, ncp, selec, nMaxP);
+  if (selec < nMaxP)
+    nMaxP = selec;
 
   // ponteiro para a primeira estrutura da lista ligada das combinações dos
   // participantes
@@ -183,31 +184,39 @@ pCon selCarPil(int nMaxP, psS saveS)
   int value, piloto = -1, carro = -1;
   for (c = 0; c < nMaxP; c++)
   {
+    if (npp == 0 || ncp == 0)
+      break;
     // buscar randow piloto
-    do
+    value = intUniformRnd(0, npp - 1);
+    if (ppp[value] == -1)
     {
-      value = intUniformRnd(0, npp - 1);
-      if (ppp[value] == -1)
-      {
-        continue;
-      }
-      piloto = value;
-      ppp[value] = -1;
-      break;
-    } while (ppp[value] == -1);
+      continue;
+    }
+    piloto = value;
+    if (npp > 1)
+      ppp = movete(ppp, value, npp);
+    if (ppp == NULL)
+    {
+      printf("erro a alucar memoria.\n");
+    }
+    npp--;
+
     // buscar randow carro
-    do
+    // buscar um numero aleatorio
+    value = intUniformRnd(0, ncp - 1);
+    if (pcp[value] == -1)
     {
-      // buscar um numero aleatorio
-      value = intUniformRnd(0, npp - 1);
-      if (pcp[value] == -1)
-      {
-        continue;
-      }
-      carro = value;
-      pcp[value] = -1;
-      break;
-    } while (pcp[value] == -1);
+      continue;
+    }
+    carro = value;
+    if (ncp > 1)
+      pcp = movete(pcp, value, ncp);
+    if (pcp == NULL)
+    {
+      printf("erro a alucar memoria.\n");
+    }
+    ncp--;
+
     // printar resultados das combinações
     printf("Corredor %d:\n\tNome do piloto:%s\n\tId do carro:%d\n\n", c + 1,
            saveS->pPilotos[piloto].nome, saveS->pCarros[carro].Id);
@@ -230,7 +239,19 @@ pCon selCarPil(int nMaxP, psS saveS)
     if (pcp[i] != -1)
       printf("O carro com Id %d não foi selecionado para a corrida nao ter vaga para correr.", saveS->pCarros[pcp[i]].Id);
 
+  free(ppp);
+  free(pcp);
+  printf("ele saiu\n");
   return combina;
+}
+
+int *movete(int *array, int value, int max)
+{
+  for (int i = value; i < max - 1; i++)
+    array[i] = array[i + 1];
+
+  array = realloc(array, (max - 1) * sizeof(int));
+  return array;
 }
 
 pCon delCon(pCon dels)
@@ -327,7 +348,7 @@ void freecorr(pCon combina)
   }
 }
 
-//isto na verdade define as experiencia ( ^ _ ^ ')
+//isto na verdade define a experiencia ( ^ _ ^ ')
 void calPontos(psS saveS, pCon combina)
 {
   pCon aux;
@@ -360,7 +381,7 @@ pCon totalde(pCon combina, int volta)
 
 pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam part)
 {
-
+  printf("ele entra aqui\n");
   pCon finder, finder2;
   int idade, ordenado = 0, *aux, i, ndes = 0;
 
@@ -371,6 +392,7 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
     // loop para passar por todas as combinações
     for (finder = combina; finder != NULL; finder = finder->prox)
     {
+      printf("isto é um loop\n");
       // estruturas dos carros e pilotos desta combinação
 
       // criar vetor dos resultdos das voltas
@@ -414,6 +436,7 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
           ndes++;
         }
       }
+      printf("ele saiu\n");
       if (ndes == nMaxP)
       {
         printf("Todos os pilotos tiveram acidentes!\n");
@@ -429,14 +452,16 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
     }
     //organiza a lista ligada
     //combina = ordTem(combina); antigo organizador
+    printf("entrou no ord\n");
     combina = ordterm2(combina); //novo organizador
+    printf("saiu do ord\n");
     if (ndes == nMaxP)
       break;
 
     //printa as posições
     verPos(combina, saveS, voltas, c, 1);
-    if(part!=NULL){
-      printf("entering\n");
+    if (part != NULL)
+    {
     }
   }
 
@@ -498,16 +523,21 @@ pCon ordterm2(pCon combina)
               finder->ant = finder->prox;
 
               finder->ant->ant = paux;
+
               paux = finder->prox;
               finder->prox = paux->prox;
               if (paux->prox != NULL)
                 paux->prox->ant = finder;
+
               paux->prox = finder;
               if (finder == inicio)
-                paux = inicio;
-              finder = paux;
+                inicio = paux;
+              
+              printf("pre")
             }
-            finder = finder->ant;
+            //para que não ande para NULL
+            if (finder->ant != NULL)
+              finder = finder->ant;
           } while (finder->ant != NULL);
 
   return inicio;
@@ -516,24 +546,25 @@ pCon ordterm2(pCon combina)
 void rempen(psS saveS)
 {
   int i;
-  for(i=0; i < saveS->nPilotos; i++)
-  if(saveS->pPilotos[i].imp!=0){
-    saveS->pPilotos[i].imp-=1;
-  }
-  for(i=0; i < saveS->nCarros; i++)
-  if(saveS->pCarros[i].avar!=0){
-    saveS->pCarros[i].avar=0;
-  }
-  
+  for (i = 0; i < saveS->nPilotos; i++)
+    if (saveS->pPilotos[i].imp != 0)
+    {
+      saveS->pPilotos[i].imp -= 1;
+    }
+  for (i = 0; i < saveS->nCarros; i++)
+    if (saveS->pCarros[i].avar != 0)
+    {
+      saveS->pCarros[i].avar = 0;
+    }
 }
-pCon ordterm(pCon combina){
+pCon ordterm(pCon combina)
+{
   pCon next, last, center;
 
-  for(center=combina;center->prox!=NULL;center=center->prox){
-    if(center->total>center->prox->total){
-      
+  for (center = combina; center->prox != NULL; center = center->prox)
+  {
+    if (center->total > center->prox->total)
+    {
     }
   }
-
-
 }

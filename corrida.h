@@ -63,4 +63,8 @@ pCon ordterm2(pCon inicio);
 
 //remover penalizaçoes
 void rempen(psS saveS);
+
+//apaga um valor de uma lista
+int *movete(int *array, int value, int max);
+
 #endif

@@ -128,9 +128,10 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
     printf("Falta de memoria no computador.\n");
     return -1;
   }
+ printf("sera que faz corrida?");
 
   combina = fazercorrida(saveS, combina, voltas, comp, nMaxP, NULL);
-
+printf("parece que faz\n");
   printf("\nA CORRIDA TERMINOU!\n");
   //menu para ver os tempos
   menufinalcor(saveS, combina, voltas, nMaxP);
