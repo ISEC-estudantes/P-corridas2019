@@ -30,4 +30,10 @@ pCam selectPil(psS saveS);
 
 //o campeonato recebe como input o saveS(já explicado), part(a lista ligada os pilotos participantes),numdone(numero de corridas já corridas),numall(numero de todas as corridas), voltas por corrida, comprimento da pista, e quantos participantes podem correr
 int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int comp, int maxpart);
+
+//meter os participantes no ficheiro binario
+int gravaBi(pCam part, int numdone, int numall, int voltas, int comp, int maxpart);
+
+//ler o ficheiro binario
+int lerBi(psS saveS);
 #endif

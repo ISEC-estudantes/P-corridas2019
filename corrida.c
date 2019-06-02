@@ -334,7 +334,7 @@ void verPos(pCon combina, psS saveS, int voltastotal, int voltaact, int esperar)
   printf("\t-------------\n\n");
   if (esperar == 1)
     if (voltastotal != voltaact)
-      printf("a esperar\n"); //espera(1);
+      espera(5);
 }
 
 void freecorr(pCon combina)

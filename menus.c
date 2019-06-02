@@ -14,8 +14,11 @@
 
 int mainmenu(psS saveS)
 {
+  lerBi(saveS);
+
   int escolha, erro = -1, help = 0;
   char test;
+
   do
   {
 
@@ -171,7 +174,7 @@ pCon adicionaCon(pCon inicio, int piloto, int carro)
     aux->total = 0;
     aux->des = 0;
     aux->gainexp = 0;
-    aux->voltades=0;
+    aux->voltades = 0;
     aux->ant = NULL;
     aux->prox = NULL;
     return aux;
@@ -197,7 +200,7 @@ pCon adicionaCon(pCon inicio, int piloto, int carro)
   aux->carro = carro;
   aux->des = 0;
   aux->gainexp = 0;
-  aux->voltades=0;
+  aux->voltades = 0;
   finder->prox = aux;
   return inicio;
 }

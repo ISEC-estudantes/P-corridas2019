@@ -59,7 +59,7 @@ int campeonatomenu(psS saveS)
   //cria uma lista ligada para os registos dos pilotos para o campeonato
   pCam parti = selectPil(saveS);
 
-  campeonato(saveS, parti, 0, corridas,voltas,comp,nMaxP);
+  campeonato(saveS, parti, 0, corridas, voltas, comp, nMaxP);
 
   return 0;
 }
@@ -85,8 +85,8 @@ pCam selectPil(psS saveS)
 
     aux->pontos = 0;
 
-    aux->acidente=0;
-    aux->gainpts=0;
+    aux->acidente = 0;
+    aux->gainpts = 0;
     //verificar se já foi criado um elemento
     if (inicio == NULL)
     {
@@ -108,6 +108,7 @@ pCam selectPil(psS saveS)
 int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int comp, int maxpart)
 {
   pCon combina;
+  int erro;
   for (int i = numdone; i < numall; i++)
   {
     combina = selCarPil(maxpart, saveS);
@@ -117,17 +118,91 @@ int campeonato(psS saveS, pCam part, int numdone, int numall, int voltas, int co
       printf("Falta de memoria no computador.\n");
       return -1;
     }
-    
+      printf("\n CARRIDA %d\n\n",i+1);
     combina = fazercorrida(saveS, combina, voltas, comp, maxpart, part);
     freecorr(combina);
 
-
-    
-    gravaBi(saveS, combina, part);
-
+    erro = gravaBi(part, i, numall, voltas, comp, maxpart);
+    if (erro != 0)
+      return erro;
   }
+  return 0;
 }
 
-//meter os participantes no ficheiro binario
-gravaBi(psS saveS, pCam part, int numdone, int numall, int voltas, int comp, int maxpar)
+int gravaBi(pCam part, int numdone, int numall, int voltas, int comp, int maxpart)
+{
+  FILE *f = fopen("campeonato.bin", "wb");
+  if (f == NULL)
+  {
+    printf("Erro a ler ter permições de escrita no ficheiro campeonato.bin\n");
+    return 1;
+  }
+  pCam aux;
+  int n = 0;
+  //numero de corridas feitas
+  fwrite(&numdone, sizeof(int), 1, f);
+  fwrite(&voltas, sizeof(int), 1, f);
+  fwrite(&comp, sizeof(int), 1, f);
+  fwrite(&maxpart, sizeof(int), 1, f);
+  for (aux = part; aux != NULL; aux = aux->prox)
+    n++;
+  fwrite(&maxpart, sizeof(int), 1, f);
+  for (aux = part; aux != NULL; aux = aux->prox)
+  {
+    fwrite(&aux->piloto, sizeof(int), 1, f);
+    fwrite(&aux->nCorridas, sizeof(int), 1, f);
+    fwrite(&aux->pontos, sizeof(float), 1, f);
+  }
+  return 0;
+}
 
+int lerBi(psS saveS)
+{
+  FILE *f = fopen("campeonato.bin", "rb");
+  if (f == NULL)
+  {
+
+    printf("Erro a ler ter permições de escrita no ficheiro campeonato.bin\n");
+    return 1;
+
+  }
+  pCam inicio = NULL, aux = NULL, antaux = NULL;
+  
+  int n = 0, i, gainpts, acidente, nCorridas, correr, pontos, piloto, numdone, voltas, comp, maxpart;
+  //numero de corridas feitas
+  fread(&numdone, sizeof(int), 1, f);
+  fread(&voltas, sizeof(int), 1, f);
+  fread(&comp, sizeof(int), 1, f);
+  fread(&maxpart, sizeof(int), 1, f);
+  fread(&maxpart, sizeof(int), 1, f);
+  for (i = 0; i < maxpart; i++)
+  {
+    fread(&piloto, sizeof(int), 1, f);
+    fread(&nCorridas, sizeof(int), 1, f);
+    fread(&pontos, sizeof(float), 1, f);
+
+    aux = malloc(sizeof(Cam));
+    if (aux == NULL)
+    {
+      printf("erro alocar memoria.\n");
+      return 1;
+    }
+
+    aux->piloto = piloto;
+    aux->nCorridas = nCorridas;
+    aux->pontos = pontos;
+    aux->correr = 0;
+    aux->acidente = 0;
+    aux->gainpts = 0;
+    if (inicio == NULL)
+      aux->ant = NULL;
+    else
+    {
+      antaux->prox = aux;
+      aux->ant = antaux;
+    }
+    aux->prox = NULL;
+    antaux = aux;
+  }
+  return campeonato(saveS, inicio, numdone, voltas, voltas, comp, maxpart);
+}
