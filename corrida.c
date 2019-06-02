@@ -86,7 +86,6 @@ int calIda(psS saveS, int indexpiloto)
 
 pCon selCarPil(int nMaxP, psS saveS)
 {
-  printf("o erro é aqui[1]\n");
   /****************************************/
 
   /******ASSOCIAR CARROS E PILOTOS*******/
@@ -161,7 +160,6 @@ pCon selCarPil(int nMaxP, psS saveS)
              saveS->pPilotos[c].nome, saveS->pPilotos[c].Id);
     }
   }
-  printf("erro não é destes\n");
   // verifar se existem pilotos para correr
   if (npp == 0)
   {
@@ -188,18 +186,15 @@ pCon selCarPil(int nMaxP, psS saveS)
       break;
     // buscar randow piloto
     value = intUniformRnd(0, npp - 1);
-    if (ppp[value] == -1)
-    {
-      continue;
-    }
-    piloto = value;
-    if (npp > 1)
-      ppp = movete(ppp, value, npp);
-    else
-    {
-      break;
-    }
 
+    piloto = ppp[value];
+    if (npp > 1)
+    {
+      for (i = value; i < npp - 1; i++)
+        ppp[i] = ppp[i + 1];
+
+      ppp = realloc(pcp, (npp - 1) * sizeof(int));
+    }
     if (ppp == NULL)
     {
       free(ppp);
@@ -212,21 +207,14 @@ pCon selCarPil(int nMaxP, psS saveS)
     // buscar randow carro
     // buscar um numero aleatorio
     value = intUniformRnd(0, ncp - 1);
-    if (pcp[value] == -1)
-    {
-      continue;
-    }
-    carro = value;
-    if (ncp > 1)
-      for (i = value; i < ncp - 1; i++)
-    pcp[i] = array[i + 1];
-  
-    
 
-  pcp = realloc(pcp, (ncp - 1) * sizeof(int));
-    else
+    carro = pcp[value];
+    if (ncp > 1)
     {
-      break;
+      for (i = value; i < ncp - 1; i++)
+        pcp[i] = pcp[i + 1];
+
+      pcp = realloc(pcp, (ncp - 1) * sizeof(int));
     }
     if (pcp == NULL)
     {
@@ -244,15 +232,13 @@ pCon selCarPil(int nMaxP, psS saveS)
     combina = adicionaCon(combina, piloto, carro);
     if (combina == NULL)
     {
-      printf("fazer free\n");
+
       free(ppp);
       free(pcp);
+
       return NULL;
     }
   }
-  printf("nem daqui??\n");
-  int i;
-  printf("problemas aqui\n");
   for (i = 0; i < npp; i++)
     if (ppp[i] != -1)
       printf("O piloto %s não foi selecionado para a corrida por nao ter vaga para correr.\n", saveS->pPilotos[ppp[i]].nome);
@@ -263,7 +249,6 @@ pCon selCarPil(int nMaxP, psS saveS)
 
   free(ppp);
   free(pcp);
-  printf("ele saiu\n");
   return combina;
 }
 
