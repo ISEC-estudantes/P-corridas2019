@@ -1,3 +1,20 @@
+typedef struct pilcam Cam, *pCam;
+//Pilotos do Campeonato(pilcam)-vai buscar todos os pilotos na estrutura e guarda o seu index 
+//para guardar os seus valores perante o campeonato em que esta a decorrer.
+struct pilcam{
+
+    int piloto;//index do piloto
+    int nCorridas;//numero de corridas em que correu
+    
+    float pontos;//pontos acumulados
+    
+    int correr; //esta a correr, 1 se esta a correr na corrida actual ou 0 se não estiver a correr
+    int acidente;//se ouve acidente durane a corrida
+    float gainpts;//pontos ganhos numa corrida por volta
+
+    pCam prox;//ponteiro para o anterior 
+    pCam ant;//ponteiro para o seguinte
+};
 // Trabalho Pratico Programacao - LEI
 // DEIS-ISEC 2018-2019
 

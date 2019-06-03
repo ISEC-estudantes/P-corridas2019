@@ -7,11 +7,11 @@
 
 #define CARROS "carros.txt"
 
-typedef struct piloto Pi, *pPi;
 typedef struct carro Car, *pCar;
 typedef struct saverS sS, *psS;
 
 
+typedef struct piloto Pi, *pPi;
 // defenição do carro
 struct carro {
   int Id;  // id do carro;valor inteiro positivo que deve ser único entre todos

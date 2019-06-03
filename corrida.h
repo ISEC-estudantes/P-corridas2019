@@ -7,10 +7,10 @@
 
 typedef struct piloto Pi, *pPi;
 typedef struct carro Car, *pCar;
-typedef struct saverS sS, *psS;
 typedef struct conbinacao Con, *pCon;
 typedef struct pilcam Cam, *pCam;
 
+typedef struct saverS sS, *psS;
 // saverS -é uma estrutura para guardar os ponteiros e valores para todas as
 // variaveis importantes do programa, assim em vez de se passar todos os valores
 // como argumentos passa se como uma unica estrutura para simplificar o numero

@@ -57,6 +57,7 @@ int mainmenu(psS saveS)
 
     case 4:
       campeonatomenu(saveS);
+      
       break;
 
     case 0:
@@ -140,10 +141,8 @@ int corridamenu(psS saveS, int voltas, int comp, int MaxAll)
     printf("Falta de memoria no computador.\n");
     return -1;
   }
-  printf("comp=%d\n", comp);
 
   combina = fazercorrida(saveS, combina, voltas, comp, nMaxP, NULL);
-  printf("parece que faz\n");
   printf("\nA CORRIDA TERMINOU!\n");
   //menu para ver os tempos
   menufinalcor(saveS, combina, voltas, nMaxP);
@@ -158,9 +157,7 @@ pCon adicionaCon(pCon inicio, int piloto, int carro)
   pCon aux = NULL;
   if (inicio == NULL)
   {
-    printf("malloc de menus.c:159\n");
     aux = malloc(sizeof(Con));
-    printf("nope\n");
     if (!aux)
     {
       printf("Falta de memoria.\n");
@@ -179,9 +176,7 @@ pCon adicionaCon(pCon inicio, int piloto, int carro)
     aux->prox = NULL;
     return aux;
   }
-  printf("malloc de menus.c:179\n");
   aux = malloc(sizeof(Con));
-  printf("nope\n");
   if (!aux)
   {
     printf("Falta de memoria.\n");

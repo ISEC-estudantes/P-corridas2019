@@ -10,9 +10,6 @@
 
 int readPilotos(char *file, pPi *pPilotos, int *nPilotos) {
     FILE *f = fopen(file, "rt");
-    //printf("opening file ...\n");
-
-    //printf("verifing file ...\n");
     if (f == NULL) {
         printf("Erro a abrir ficheiro %s.\n", file);
 
@@ -23,23 +20,13 @@ int readPilotos(char *file, pPi *pPilotos, int *nPilotos) {
 
     // le o numer de paragrafos que existem e se pedido printa os paragrafos no
     // ecra
-    //printf("File opened successively.\n\nReading file ...\n");
     Pi piloto;
-    //printf("\n######### TEXT FILE - START ##########\n\n");
      while (fscanf(f," %99[^\n] %d %d %d %d %d %f %d", piloto.nome,
             &piloto.Id, &piloto.Dnas, &piloto.Mnas,
             &piloto.Anas, &piloto.peso, &piloto.exp,
             &piloto.imp) == 8){
             npilotos++;
-          /*
-            printf("%s\n%d %d %d %d %d %f %d\n\n", piloto.nome,
-            piloto.Id, piloto.Dnas, piloto.Mnas,
-            piloto.Anas, piloto.peso, piloto.exp,
-            piloto.impedido);           
-          */
         }
-
-    //printf("######### TEXT FILE - END ###########\n\n");
 
     // calcula o numero de pilotos
     
@@ -64,8 +51,6 @@ int readPilotos(char *file, pPi *pPilotos, int *nPilotos) {
 
     int erros = 0;
     int c = 0;
-    //printf("a verficar as variaveis...\n");
-
     // volta ao inicio do ficheiro
     rewind(f);
 
@@ -84,7 +69,6 @@ int readPilotos(char *file, pPi *pPilotos, int *nPilotos) {
         c++;
     }
     
-    //printf("ficheiro lido e variaveis verificadas com sucesso.\n");
     fclose(f);
 
     // passar variaveis para a main function
@@ -134,20 +118,17 @@ int verificaPiloto(Pi piloto, int n, int piId[]) {
         return 3;
     }
 
-  //  printf("%s\n%d %d %d %d %d %f %d\n\n", piloto.nome, piloto.Id, piloto.Dnas,piloto.Mnas, piloto.Anas, piloto.peso, piloto.exp, piloto.impedido);
     return 0;
 }
 
 
 int salvaP(psS saveS) {
   FILE *f = fopen(PILOTOS, "wt");
-//  printf("A Abrir Ficheiro...\n");
   if (f == NULL) {
     printf("Erro a salvar o ficheiro.\n");
     fclose(f);
     return 1;
   }
- // printf("ficheiro aberto com sucesso\n");
   pPi pilotos = saveS->pPilotos;
   int c;
   for (c = 0; c < (saveS->nPilotos); c++)

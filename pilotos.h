@@ -10,11 +10,13 @@
 
 
 
-typedef struct piloto Pi, *pPi;
 typedef struct carro Car, *pCar;
 typedef struct saverS sS, *psS;
 typedef struct pilcam Cam, *pCam;
 
+
+
+typedef struct piloto Pi, *pPi;
 // defenição do piloto
 struct piloto {
   // identificação basica

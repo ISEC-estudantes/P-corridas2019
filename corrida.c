@@ -111,8 +111,6 @@ pCon selCarPil(int nMaxP, psS saveS)
     if (saveS->pCarros[c].avar == 0)
     {
       ncp++;
-      printf("ncp=%d\n", ncp);
-      printf("malloc de corrida.c:115\n");
       if (ncp == 1)
         pcp = malloc(sizeof(int));
       else
@@ -123,7 +121,6 @@ pCon selCarPil(int nMaxP, psS saveS)
         return NULL;
       }
       pcp[ncp - 1] = c;
-      printf("nope\n");
     }
     else
     {
@@ -145,8 +142,6 @@ pCon selCarPil(int nMaxP, psS saveS)
     if (saveS->pPilotos[c].imp == 0)
     {
       npp++;
-      printf("npp=%d\n", npp);
-      printf("malloc de corrida.c:150\n");
       if (npp == 1)
         ppp = malloc(sizeof(int));
       else
@@ -157,7 +152,6 @@ pCon selCarPil(int nMaxP, psS saveS)
         return NULL;
       }
       ppp[npp - 1] = c;
-      printf("nope\n");
     }
     else
     {
@@ -166,7 +160,6 @@ pCon selCarPil(int nMaxP, psS saveS)
              saveS->pPilotos[c].nome, saveS->pPilotos[c].Id);
     }
   }
-  printf("não parecem ser os inicioais mas não sei de onde vem...\n");
   // verifar se existem pilotos para correr
   if (npp == 0)
   {
@@ -179,7 +172,6 @@ pCon selCarPil(int nMaxP, psS saveS)
     selec = npp;
   else
     selec = ncp;
-  printf("npp %d ncp %d selec %d nmaxp %d\n", npp, ncp, selec, nMaxP);
   if (selec < nMaxP)
     nMaxP = selec;
 
@@ -237,11 +229,9 @@ pCon selCarPil(int nMaxP, psS saveS)
   for (i = 0; i < ncp; i++)
     if (pcp[i] != -1)
       printf("O carro com Id %d não foi selecionado para a corrida nao ter vaga para correr.\n", saveS->pCarros[pcp[i]].Id);
-  printf("free de corrida.c:240\n");
   free(pcp);
-  printf("primeiro passa\n");
   free(ppp);
-  printf("nope\n");
+
   return combina;
 }
 
@@ -403,9 +393,9 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
       if (c == 0)
       {
         finder->idade = calIda(saveS, finder->piloto);
-        printf("\nmalloc de corrida.c:398\n");
+
         aux = malloc(sizeof(int) * voltas);
-        printf("nope\n\n");
+
         if (!aux)
         {
           printf("Erro na alocação de memoria.\n");
@@ -419,14 +409,11 @@ pCon fazercorrida(psS saveS, pCon combina, int voltas, int comp, int nMaxP, pCam
       // verificar a probablidade de haver acidente caso n tennha desistido
       if (finder->des == 0)
       {
-        // printf("finder->des==%d de %s\n", finder->des,
-        // saveS->pPilotos[finder->piloto].nome);
+
         prob = probEvento(ACIDENTE);
         if (prob == 1)
         {
-          // printf("probablidade ficou a 1 para a combinação do piloto
-          // %s\n",
-          //        saveS->pPilotos[finder->piloto].nome);
+
           finder->des = 1;
           saveS->pPilotos[finder->piloto].imp = 3;
           saveS->pCarros[finder->carro].avar = 1;

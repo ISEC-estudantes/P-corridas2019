@@ -4,8 +4,11 @@
 
 
 typedef struct saverS sS, *psS;
-typedef struct pilcam Cam, *pCam;
 
+
+typedef struct pilcam Cam, *pCam;
+//Pilotos do Campeonato(pilcam)-vai buscar todos os pilotos na estrutura e guarda o seu index 
+//para guardar os seus valores perante o campeonato em que esta a decorrer.
 struct pilcam{
 
     int piloto;//index do piloto

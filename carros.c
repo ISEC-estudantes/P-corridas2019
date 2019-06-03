@@ -20,19 +20,17 @@ int readCar(char *file, pCar *pCarros, int *nCarros) {
   }
   int ncarros = 0;
   int i;
-  // le o numer de paragrafos que existem e se pedido printa os paragrafos no
-  // ecra
-  // printf("File opened successively.\n\nReading file ...\n");
+  
 
   Car carro;
-  // printf("\n######### TEXT FILE - START ##########\n\n");
+
 
   while (fscanf(f, "%d %d %d", &carro.Id, &carro.pot, &carro.avar) == 3) {
     ncarros++;
-    //   printf("%d %d %d \n\n", carro.Id, carro.pot, carro.avar);
+
   }
 
-  // printf("######### TEXT FILE - END ###########\n\n");
+ 
 
   if (ncarros <= 0) {
     printf("Não existem carros.\n");
@@ -53,11 +51,11 @@ int readCar(char *file, pCar *pCarros, int *nCarros) {
 
   int erros = 0;
   int c = 0;
-  // printf("a verficar as variaveis...\n");
+ 
 
-  // volta ao inicio do ficheiro
+ 
   rewind(f);
-  // printf("rewind prefectly done...\n");
+ 
   while (fscanf(f, "%d %d %d", &carros[c].Id, &carros[c].pot,
                 &carros[c].avar) == 3) {
     // verificar se os valores estao degitados como foram especificados
@@ -103,13 +101,13 @@ int verificaCarro(Car carro, int n, int carId[]) {
 
 int salvaC(psS saveS) {
   FILE *f = fopen(CARROS, "wt");
-  // printf("A Abrir Ficheiro...\n");
+ 
   if (f == NULL) {
     printf("Erro a salvar o ficheiro.\n");
     fclose(f);
     return 1;
   }
-  // printf("ficheiro aberto com sucesso\n");
+
   pCar carros = saveS->pCarros;
   int c;
   for (c = 0; c < (saveS->nCarros); c++)
@@ -135,7 +133,7 @@ void printCar(psS saveS) {
 
 int carDis(psS saveS, int *max, int **carL) {
   int c, ncars = 0;
-  int *diCars = NULL, *aux;//malloc(sizeof(int)), aux;
+  int *diCars = NULL, *aux;
 
   pCar carros = saveS->pCarros;
 
