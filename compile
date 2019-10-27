@@ -1,1 +1,0 @@
-gcc main.c campeonato.c carros.c corrida.c menus.c pilotos.c utils.c -o run -std=c99
