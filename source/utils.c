@@ -19,8 +19,7 @@ struct pilcam{
 // DEIS-ISEC 2018-2019
 
 /******************************/
-/* João Pedro Neves Gonçalves */
-/* Nº 21280302                */
+/*          OnikenX           */
 /******************************/
 
 #include <stdio.h>

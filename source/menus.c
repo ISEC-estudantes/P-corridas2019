@@ -1,7 +1,7 @@
 /******************************/
-/* João Pedro Neves Gonçalves */
-/* Nº 21280302                */
+/*          OnikenX           */
 /******************************/
+
 #include "menus.h"
 #include "carros.h"
 #include "corrida.h"

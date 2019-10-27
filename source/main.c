@@ -1,7 +1,7 @@
 /******************************/
-/* João Pedro Neves Gonçalves */
-/* Nº 21280302                */
+/*          OnikenX           */
 /******************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "pilotos.h"

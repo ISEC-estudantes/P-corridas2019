@@ -1,7 +1,7 @@
 /******************************/
-/* João Pedro Neves Gonçalves */
-/* Nº 21280302                */
+/*          OnikenX           */
 /******************************/
+
 #ifndef CORRIDA_H
 #define CORRIDA_H
 

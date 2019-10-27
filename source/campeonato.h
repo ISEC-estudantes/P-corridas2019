@@ -1,3 +1,6 @@
+/******************************/
+/*          OnikenX           */
+/******************************/
 
 #ifndef CAMPEONATO_H
 #define CAMPEONATO_H
