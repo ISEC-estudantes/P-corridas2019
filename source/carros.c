@@ -85,7 +85,7 @@ int verificaCarro(Car carro, int n, int carId[]) {
       // verificar o valor do Id
       return 1;
     }
-    i++;
+    ++i;
   }
   if (i == n) {
     printf(

@@ -66,7 +66,7 @@ int readPilotos(char *file, pPi *pPilotos, int *nPilotos) {
             return erros;
         }
         
-        c++;
+        ++c;
     }
     
     fclose(f);

@@ -1,0 +1,24 @@
+Paulo Andrade
+2 23 12 1995 76 6.00 0
+
+Faisca
+3 1 1 1980 50 9.50 0
+
+Diana Alves Pombo
+4 1 10 1990 55 9.50 0
+
+Ana Luisa Freitas
+7 12 7 1976 68 7.00 0
+
+Mr ropanhol das freitas
+8 12 7 1969 69 12.50 0
+
+Fxvnder
+10 1 1 2009 40 0.00 0
+
+Renato Craveiro
+11 26 2 2000 115 110.00 0
+
+Castela
+12 1 1 2000 50 20.00 0
+
